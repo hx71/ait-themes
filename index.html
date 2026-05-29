@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIT Themes - Modern Startup Template</title>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#2563eb', // Blue-600
+                        secondary: '#4f46e5', // Indigo-600
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Custom CSS for Animations -->
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-900 dark:text-slate-50 font-sans antialiased overflow-x-hidden transition-colors duration-300">
+
+    <!-- Decorative Background Elements -->
+    <div class="fixed inset-0 z-[-1] overflow-hidden pointer-events-none">
+        <div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-blue-400/20 dark:bg-blue-600/10 blur-[100px]"></div>
+        <div class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-indigo-400/20 dark:bg-indigo-600/10 blur-[100px]"></div>
+    </div>
+
+    <!-- Placeholder for 1. Navbar -->
+    <div id="navbar-placeholder"></div>
+
+    <!-- 2. Hero Section -->
+    <section id="beranda" class="pt-32 pb-20 lg:pt-48 lg:pb-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative">
+        <div class="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center">
+            <div class="max-w-2xl reveal">
+                <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 text-sm font-medium mb-6 border border-blue-100 dark:border-blue-800/50">
+                    <span class="flex h-2 w-2 rounded-full bg-blue-600"></span>
+                    Version 1.0 Released
+                </div>
+                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-slate-900 dark:text-white leading-tight mb-6">
+                    Build Your <br>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-500">Digital Future.</span>
+                </h1>
+                <p class="text-lg text-slate-600 dark:text-slate-400 mb-8 leading-relaxed">
+                    AIT Themes delivers premium, clean, and minimalist design solutions. Specifically designed for modern startups that want to look professional with maximum performance.
+                </p>
+                <div class="flex flex-wrap gap-4">
+                    <a href="admin/index.html" class="px-8 py-3.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-medium hover:shadow-lg hover:shadow-blue-500/30 hover:-translate-y-1 transition-all duration-300 flex items-center gap-2">
+                        Try Live Demo <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </a>
+                    <a href="#fitur" class="px-8 py-3.5 rounded-xl bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 font-medium border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors duration-300 flex items-center gap-2">
+                        Learn Features
+                    </a>
+                </div>
+                
+                <div class="mt-10 flex items-center gap-4 text-sm text-slate-500 dark:text-slate-400">
+                    <div class="flex -space-x-2">
+                        <img class="w-8 h-8 rounded-full border-2 border-white dark:border-slate-900 object-cover" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=64&q=80" alt="User">
+                        <img class="w-8 h-8 rounded-full border-2 border-white dark:border-slate-900 object-cover" src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=64&q=80" alt="User">
+                        <img class="w-8 h-8 rounded-full border-2 border-white dark:border-slate-900 object-cover" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=64&q=80" alt="User">
+                    </div>
+                    <p>Trusted by 10,000+ creators</p>
+                </div>
+            </div>
+            
+            <div class="relative lg:ml-auto reveal delay-200">
+                <!-- Decorative Frame -->
+                <div class="absolute inset-0 bg-gradient-to-tr from-blue-600 to-indigo-500 rounded-[2rem] transform rotate-3 scale-105 opacity-20 dark:opacity-40 blur-xl"></div>
+                
+                <!-- Main Image/Dashboard Mockup -->
+                <a href="admin/index.html" class="block relative bg-white dark:bg-slate-800 rounded-[2rem] border border-slate-200/50 dark:border-slate-700/50 shadow-2xl overflow-hidden backdrop-blur-sm group cursor-pointer">
+                    <!-- Mac OS Window Header -->
+                    <div class="h-10 border-b border-slate-100 dark:border-slate-700 flex items-center px-4 gap-2 bg-slate-50/50 dark:bg-slate-900/50">
+                        <div class="w-3 h-3 rounded-full bg-red-400"></div>
+                        <div class="w-3 h-3 rounded-full bg-amber-400"></div>
+                        <div class="w-3 h-3 rounded-full bg-green-400"></div>
+                    </div>
+                    <!-- Image Content -->
+                    <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Dashboard Preview" class="w-full object-cover h-[300px] sm:h-[400px] opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500">
+                    
+                    <!-- Overlay text -->
+                    <div class="absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                        <span class="px-6 py-3 bg-white text-slate-900 rounded-full font-bold shadow-lg flex items-center gap-2 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300">
+                            View Admin Panel <i data-lucide="external-link" class="w-4 h-4"></i>
+                        </span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. Feature Section -->
+    <section id="fitur" class="py-20 bg-white dark:bg-slate-900 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-16 reveal">
+                <h2 class="text-blue-600 dark:text-blue-400 font-semibold tracking-wide uppercase text-sm mb-3">Key Features</h2>
+                <h3 class="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-4">Everything you need</h3>
+                <p class="text-slate-600 dark:text-slate-400 text-lg">Developed with the latest technologies to ensure maximum performance and the best user experience.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Feature 1 -->
+                <div class="group bg-slate-50 dark:bg-slate-800/50 rounded-2xl p-8 border border-slate-100 dark:border-slate-700/50 hover:shadow-xl hover:shadow-blue-500/5 hover:-translate-y-2 transition-all duration-300 reveal delay-100">
+                    <div class="w-14 h-14 rounded-xl bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400 mb-6 group-hover:scale-110 transition-transform duration-300">
+                        <i data-lucide="smartphone" class="w-7 h-7"></i>
+                    </div>
+                    <h4 class="text-xl font-semibold text-slate-900 dark:text-white mb-3">Perfectly Responsive</h4>
+                    <p class="text-slate-600 dark:text-slate-400 leading-relaxed">Display that adapts perfectly on all devices, from smartphones, tablets, to high-resolution desktops.</p>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="group bg-slate-50 dark:bg-slate-800/50 rounded-2xl p-8 border border-slate-100 dark:border-slate-700/50 hover:shadow-xl hover:shadow-blue-500/5 hover:-translate-y-2 transition-all duration-300 reveal delay-200">
+                    <div class="w-14 h-14 rounded-xl bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center text-indigo-600 dark:text-indigo-400 mb-6 group-hover:scale-110 transition-transform duration-300">
+                        <i data-lucide="zap" class="w-7 h-7"></i>
+                    </div>
+                    <h4 class="text-xl font-semibold text-slate-900 dark:text-white mb-3">High Performance</h4>
+                    <p class="text-slate-600 dark:text-slate-400 leading-relaxed">Deeply optimized for lightning-fast load speeds. Get a perfect score on Lighthouse.</p>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="group bg-slate-50 dark:bg-slate-800/50 rounded-2xl p-8 border border-slate-100 dark:border-slate-700/50 hover:shadow-xl hover:shadow-blue-500/5 hover:-translate-y-2 transition-all duration-300 reveal delay-300">
+                    <div class="w-14 h-14 rounded-xl bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center text-emerald-600 dark:text-emerald-400 mb-6 group-hover:scale-110 transition-transform duration-300">
+                        <i data-lucide="shield-check" class="w-7 h-7"></i>
+                    </div>
+                    <h4 class="text-xl font-semibold text-slate-900 dark:text-white mb-3">Extra Security</h4>
+                    <p class="text-slate-600 dark:text-slate-400 leading-relaxed">Clean code that follows modern security standards to protect you and your users' data.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Placeholder for 4. Footer Section -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Scripts -->
+    <script>
+        // Memuat Komponen secara dinamis (Navbar & Footer) dengan cache buster
+        const cb = window.location.protocol.startsWith('http') ? '?v=' + new Date().getTime() : '';
+        Promise.all([
+            fetch('components/navbar.html' + cb).then(res => res.text()),
+            fetch('components/footer.html' + cb).then(res => res.text())
+        ])
+        .then(([navbarData, footerData]) => {
+            document.getElementById('navbar-placeholder').innerHTML = navbarData;
+            document.getElementById('footer-placeholder').innerHTML = footerData;
+            
+            // Muat main.js setelah semua komponen masuk ke DOM agar event listener tidak error
+            const script = document.createElement('script');
+            script.src = 'assets/js/main.js';
+            document.body.appendChild(script);
+        })
+        .catch(error => console.error('Error loading components:', error));
+    </script>
+</body>
+</html>

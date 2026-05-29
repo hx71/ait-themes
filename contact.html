@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact - AIT Themes</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'], },
+                    colors: { primary: '#2563eb', secondary: '#4f46e5', }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-900 dark:text-slate-50 font-sans antialiased overflow-x-hidden transition-colors duration-300">
+
+    <div class="fixed inset-0 z-[-1] overflow-hidden pointer-events-none">
+        <div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-blue-400/20 dark:bg-blue-600/10 blur-[100px]"></div>
+        <div class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-indigo-400/20 dark:bg-indigo-600/10 blur-[100px]"></div>
+    </div>
+
+    <div id="navbar-placeholder"></div>
+
+    <!-- Contact Section -->
+    <section class="pt-32 pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative min-h-[70vh]">
+        <div class="grid lg:grid-cols-2 gap-16 items-start">
+            
+            <!-- Contact Info -->
+            <div class="reveal">
+                <h1 class="text-4xl sm:text-5xl font-bold text-slate-900 dark:text-white mb-6">Let's Talk</h1>
+                <p class="text-slate-600 dark:text-slate-400 text-lg mb-12">Have questions, a project idea, or need technical help? Our team is ready to listen and assist you.</p>
+                
+                <div class="space-y-6">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-xl bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400">
+                            <i data-lucide="mail" class="w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium text-slate-500 dark:text-slate-400">Our Email</p>
+                            <p class="text-lg font-semibold text-slate-900 dark:text-white">halo@aitthemes.com</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-xl bg-indigo-50 dark:bg-indigo-900/30 flex items-center justify-center text-indigo-600 dark:text-indigo-400">
+                            <i data-lucide="phone" class="w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium text-slate-500 dark:text-slate-400">Call Us</p>
+                            <p class="text-lg font-semibold text-slate-900 dark:text-white">+62 812 3456 7890</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Form -->
+            <div class="bg-white dark:bg-slate-800 p-8 rounded-[2rem] shadow-xl border border-slate-200/50 dark:border-slate-700/50 reveal delay-200">
+                <form class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Full Name</label>
+                        <input type="text" placeholder="Enter your name" class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Email Address</label>
+                        <input type="email" placeholder="name@email.com" class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">Your Message</label>
+                        <textarea rows="4" placeholder="Write your message here..." class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"></textarea>
+                    </div>
+                    <button type="button" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-medium hover:shadow-lg hover:shadow-blue-500/30 transition-all duration-300 transform hover:-translate-y-0.5">
+                        Send Message
+                    </button>
+                </form>
+            </div>
+            
+        </div>
+    </section>
+
+    <div id="footer-placeholder"></div>
+
+    <script>
+        const cb = window.location.protocol.startsWith('http') ? '?v=' + new Date().getTime() : '';
+        Promise.all([
+            fetch('components/navbar.html' + cb).then(res => res.text()),
+            fetch('components/footer.html' + cb).then(res => res.text())
+        ])
+        .then(([navbarData, footerData]) => {
+            document.getElementById('navbar-placeholder').innerHTML = navbarData;
+            document.getElementById('footer-placeholder').innerHTML = footerData;
+            const script = document.createElement('script');
+            script.src = 'assets/js/main.js';
+            document.body.appendChild(script);
+        })
+        .catch(error => console.error('Error loading components:', error));
+    </script>
+</body>
+</html>

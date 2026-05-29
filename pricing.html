@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pricing - AIT Themes</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'], },
+                    colors: { primary: '#2563eb', secondary: '#4f46e5', }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-900 dark:text-slate-50 font-sans antialiased overflow-x-hidden transition-colors duration-300">
+
+    <div class="fixed inset-0 z-[-1] overflow-hidden pointer-events-none">
+        <div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-blue-400/20 dark:bg-blue-600/10 blur-[100px]"></div>
+        <div class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-indigo-400/20 dark:bg-indigo-600/10 blur-[100px]"></div>
+    </div>
+
+    <div id="navbar-placeholder"></div>
+
+    <!-- Pricing Section -->
+    <section class="pt-32 pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative min-h-[70vh]">
+        <div class="text-center max-w-2xl mx-auto mb-16 reveal">
+            <h1 class="text-4xl sm:text-5xl font-bold text-slate-900 dark:text-white mb-4">Transparent Pricing</h1>
+            <p class="text-slate-600 dark:text-slate-400 text-lg">Choose the plan that best fits your business needs.</p>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto items-center">
+            <!-- Basic Plan -->
+            <div class="bg-white dark:bg-slate-800 rounded-2xl p-8 border border-slate-200 dark:border-slate-700 shadow-sm reveal delay-100">
+                <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-2">Basic</h3>
+                <p class="text-slate-500 dark:text-slate-400 text-sm mb-6">Suitable for personal projects</p>
+                <div class="mb-6"><span class="text-4xl font-bold text-slate-900 dark:text-white">Free</span></div>
+                <ul class="space-y-4 mb-8 text-sm text-slate-600 dark:text-slate-400">
+                    <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-emerald-500"></i> 1 Project</li>
+                    <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-emerald-500"></i> Basic Components</li>
+                    <li class="flex items-center gap-3 opacity-50"><i data-lucide="x" class="w-4 h-4 text-slate-400"></i> Priority Support</li>
+                </ul>
+                <a href="#" class="block w-full py-3 px-4 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-900 dark:text-white rounded-xl text-center font-medium transition-colors">Choose Basic</a>
+            </div>
+            
+            <!-- Pro Plan (Highlighted) -->
+            <div class="bg-gradient-to-b from-blue-600 to-indigo-600 rounded-3xl p-8 shadow-xl transform md:-translate-y-4 reveal delay-200 text-white relative">
+                <div class="absolute top-0 right-0 transform translate-x-2 -translate-y-2 bg-amber-400 text-slate-900 text-xs font-bold px-3 py-1 rounded-full">Popular</div>
+                <h3 class="text-lg font-semibold mb-2">Pro</h3>
+                <p class="text-blue-100 text-sm mb-6">For startups & agencies</p>
+                <div class="mb-6"><span class="text-4xl font-bold">IDR 299k</span><span class="text-blue-200">/mo</span></div>
+                <ul class="space-y-4 mb-8 text-sm text-blue-50">
+                    <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-white"></i> Unlimited Projects</li>
+                    <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-white"></i> All Premium Components</li>
+                    <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-white"></i> Dashboard Template Access</li>
+                    <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-white"></i> Priority Support</li>
+                </ul>
+                <a href="#" class="block w-full py-3 px-4 bg-white text-blue-600 rounded-xl text-center font-medium hover:bg-slate-50 transition-colors">Get Started with Pro</a>
+            </div>
+            
+            <!-- Enterprise Plan -->
+            <div class="bg-white dark:bg-slate-800 rounded-2xl p-8 border border-slate-200 dark:border-slate-700 shadow-sm reveal delay-300">
+                <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-2">Enterprise</h3>
+                <p class="text-slate-500 dark:text-slate-400 text-sm mb-6">Large scale & teams</p>
+                <div class="mb-6"><span class="text-4xl font-bold text-slate-900 dark:text-white">Custom</span></div>
+                <ul class="space-y-4 mb-8 text-sm text-slate-600 dark:text-slate-400">
+                    <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-emerald-500"></i> Everything in Pro plan</li>
+                    <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-emerald-500"></i> Custom Design</li>
+                    <li class="flex items-center gap-3"><i data-lucide="check" class="w-4 h-4 text-emerald-500"></i> 24/7 Support</li>
+                </ul>
+                <a href="#" class="block w-full py-3 px-4 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-900 dark:text-white rounded-xl text-center font-medium transition-colors">Contact Us</a>
+            </div>
+        </div>
+    </section>
+
+    <div id="footer-placeholder"></div>
+
+    <script>
+        const cb = window.location.protocol.startsWith('http') ? '?v=' + new Date().getTime() : '';
+        Promise.all([
+            fetch('components/navbar.html' + cb).then(res => res.text()),
+            fetch('components/footer.html' + cb).then(res => res.text())
+        ])
+        .then(([navbarData, footerData]) => {
+            document.getElementById('navbar-placeholder').innerHTML = navbarData;
+            document.getElementById('footer-placeholder').innerHTML = footerData;
+            
+            // Activate navbar menu link for pricing
+            const navLinks = document.querySelectorAll('#navbar a');
+            navLinks.forEach(link => {
+                if(link.getAttribute('href') === 'pricing.html') {
+                    link.classList.add('text-blue-600', 'dark:text-blue-400');
+                }
+            });
+
+            const script = document.createElement('script');
+            script.src = 'assets/js/main.js';
+            document.body.appendChild(script);
+        })
+        .catch(error => console.error('Error loading components:', error));
+    </script>
+</body>
+</html>

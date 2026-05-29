@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transactions History - AIT Themes</title>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#2563eb', // Blue-600
+                        secondary: '#4f46e5', // Indigo-600
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Custom CSS for Scrollbars & Animations -->
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <style>
+        .fade-in {
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .sidebar-item-active {
+            background-color: #eff6ff;
+            color: #2563eb;
+            font-weight: 600;
+            border-left: 4px solid #2563eb;
+        }
+        .dark .sidebar-item-active {
+            background-color: rgba(37, 99, 235, 0.15);
+            color: #60a5fa;
+            border-left: 4px solid #3b82f6;
+        }
+
+        /* Sidebar Minimized state */
+        @media (min-width: 1024px) {
+            body.sidebar-minimized #desktop-sidebar {
+                width: 5rem; /* w-20 */
+            }
+            body.sidebar-minimized #main-content-wrapper {
+                padding-left: 5rem; /* lg:pl-20 */
+            }
+            body.sidebar-minimized #desktop-sidebar #desktop-logo-text,
+            body.sidebar-minimized #desktop-sidebar nav span,
+            body.sidebar-minimized #desktop-sidebar .tab-btn-text,
+            body.sidebar-minimized #desktop-sidebar #desktop-user-info,
+            body.sidebar-minimized #desktop-sidebar #desktop-logout-text {
+                display: none;
+            }
+            body.sidebar-minimized #desktop-sidebar .tab-btn {
+                justify-content: center;
+                padding-left: 0;
+                padding-right: 0;
+                gap: 0;
+            }
+            body.sidebar-minimized #desktop-sidebar #desktop-user-card {
+                justify-content: center;
+                padding: 0.5rem;
+            }
+            body.sidebar-minimized #desktop-sidebar #desktop-logout-btn {
+                justify-content: center;
+                padding: 0.5rem;
+                width: 2.75rem;
+                height: 2.75rem;
+                border-radius: 9999px;
+            }
+            body.sidebar-minimized #desktop-sidebar .h-16 {
+                justify-content: center;
+                padding-left: 0;
+                padding-right: 0;
+            }
+            body.sidebar-minimized #desktop-sidebar #minimize-sidebar-btn {
+                position: absolute;
+                right: -0.75rem;
+                top: 1.25rem;
+                background-color: white;
+                border: 1px solid rgb(226, 232, 240);
+                box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+                z-index: 50;
+                border-radius: 9999px;
+            }
+            body.sidebar-minimized.dark #desktop-sidebar #minimize-sidebar-btn {
+                background-color: rgb(30, 41, 59);
+                border-color: rgb(51, 65, 85);
+                box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.5);
+            }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-900 dark:text-slate-50 font-sans antialiased transition-colors duration-300">
+
+    <!-- Sidebar Placeholder -->
+    <div id="sidebar-placeholder"></div>
+
+    <!-- Main Content Wrapper -->
+    <div id="main-content-wrapper" class="lg:pl-64 flex flex-col min-h-screen bg-slate-50 dark:bg-slate-900 transition-all duration-300">
+        
+        <!-- Top Navbar Header Placeholder -->
+        <div id="navbar-placeholder"></div>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto space-y-6">
+
+            <!-- ================= TAB 4: TRANSACTIONS ================= -->
+            <section id="tab-transactions" class="tab-pane fade-in space-y-6">
+                <!-- Transactions Controls -->
+                <div class="flex flex-col md:flex-row justify-between items-center gap-4 bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200/50 dark:border-slate-700/50 shadow-sm">
+                    <div class="relative w-full md:w-80">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i data-lucide="search" class="w-4 h-4 text-slate-400"></i>
+                        </div>
+                        <input id="trx-search" type="text" oninput="renderTransactions()" class="block w-full pl-9 pr-4 py-2 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all" placeholder="Search Invoice or Customer...">
+                    </div>
+                    <div class="w-full md:w-auto flex flex-wrap items-center gap-3">
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs text-slate-400">Status:</span>
+                            <select id="trx-status-filter" onchange="renderTransactions()" class="px-3 py-2 text-sm border border-slate-200 dark:border-slate-700 rounded-xl bg-slate-50 dark:bg-slate-900 text-slate-600 dark:text-slate-300 outline-none">
+                                <option value="All">All</option>
+                                <option value="Success">Success</option>
+                                <option value="Pending">Pending</option>
+                                <option value="Cancelled">Cancelled</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Transactions Detailed Table -->
+                <div class="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200/50 dark:border-slate-700/50 shadow-sm overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm whitespace-nowrap">
+                            <thead>
+                                <tr class="border-b border-slate-100 dark:border-slate-700 text-slate-400 font-semibold bg-slate-50/50 dark:bg-slate-900/10">
+                                    <th class="py-3 px-6">Invoice No.</th>
+                                    <th class="py-3 px-6">Customer</th>
+                                    <th class="py-3 px-6">Purchase Item</th>
+                                    <th class="py-3 px-6">Date</th>
+                                    <th class="py-3 px-6 text-right">Total Payment</th>
+                                    <th class="py-3 px-6 text-center">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="trx-table-tbody">
+                                <!-- Dynamic transactions -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Footer Placeholder -->
+            <div id="footer-placeholder"></div>
+        </main>
+    </div>
+
+    <script>
+        function closeSidebar() {
+            const mobileSidebar = document.getElementById('mobile-sidebar');
+            const backdrop = document.getElementById('mobile-sidebar-backdrop');
+            if (mobileSidebar && backdrop) {
+                mobileSidebar.classList.add('-translate-x-full');
+                backdrop.classList.remove('opacity-100');
+                setTimeout(() => { backdrop.classList.add('hidden'); }, 300);
+            }
+        }
+
+        function toggleSidebarMinimize() {
+            const body = document.body;
+            body.classList.toggle('sidebar-minimized');
+            
+            const isMinimized = body.classList.contains('sidebar-minimized');
+            localStorage.setItem('sidebar-minimized', isMinimized ? 'true' : 'false');
+            
+            const icon = document.getElementById('minimize-icon');
+            if (icon) {
+                icon.setAttribute('data-lucide', isMinimized ? 'chevron-right' : 'chevron-left');
+                if (window.lucide) {
+                    window.lucide.createIcons();
+                }
+            }
+        }
+
+        function initAdminControls() {
+            lucide.createIcons();
+            const openMobileBtn = document.getElementById('open-mobile-sidebar-btn');
+            const closeMobileBtn = document.getElementById('close-mobile-sidebar-btn');
+            const mobileSidebar = document.getElementById('mobile-sidebar');
+            const backdrop = document.getElementById('mobile-sidebar-backdrop');
+
+            if (openMobileBtn) openMobileBtn.addEventListener('click', () => {
+                mobileSidebar.classList.remove('-translate-x-full');
+                backdrop.classList.remove('hidden');
+                setTimeout(() => { backdrop.classList.add('opacity-100'); }, 10);
+            });
+            if (closeMobileBtn) closeMobileBtn.addEventListener('click', closeSidebar);
+            if (backdrop) backdrop.addEventListener('click', closeSidebar);
+
+            // Dark Mode Logic
+            const htmlElement = document.documentElement;
+            const themeBtn = document.getElementById('theme-toggle');
+            
+            if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                htmlElement.classList.add('dark');
+                updateThemeIcons('dark');
+            } else {
+                htmlElement.classList.remove('dark');
+                updateThemeIcons('light');
+            }
+
+            function updateThemeIcons(theme) {
+                const iconDark = document.getElementById('theme-icon-dark');
+                const iconLight = document.getElementById('theme-icon-light');
+                if (theme === 'dark') {
+                    if (iconDark) iconDark.classList.remove('hidden');
+                    if (iconLight) iconLight.classList.add('hidden');
+                } else {
+                    if (iconDark) iconDark.classList.add('hidden');
+                    if (iconLight) iconLight.classList.remove('hidden');
+                }
+            }
+
+            if (themeBtn) {
+                themeBtn.addEventListener('click', () => {
+                    let activeTheme = 'light';
+                    if (htmlElement.classList.contains('dark')) {
+                        htmlElement.classList.remove('dark');
+                        localStorage.setItem('color-theme', 'light');
+                    } else {
+                        htmlElement.classList.add('dark');
+                        localStorage.setItem('color-theme', 'dark');
+                        activeTheme = 'dark';
+                    }
+                    updateThemeIcons(activeTheme);
+                });
+            }
+        }
+
+        function initPage(tabId) {
+            const titleMap = {
+                'overview': 'Analytics Overview',
+                'themes': 'Digital Themes Management',
+                'users': 'User Management',
+                'transactions': 'Transaction History Log',
+                'settings': 'Dashboard Settings',
+                'form': 'Form Elements Preview',
+                'form-wizard': 'Form Wizard Stepper',
+                'select': 'Select Elements Preview',
+                'datepicker': 'Date & Time Pickers',
+                'modal': 'Interactive Modals Preview',
+                'alert': 'Alert Panels & Badges'
+            };
+            
+            const pageTitle = document.getElementById('page-title');
+            if (pageTitle) {
+                pageTitle.innerText = titleMap[tabId] || 'Dashboard';
+            }
+
+            const btns = document.querySelectorAll('.tab-btn');
+            btns.forEach(btn => {
+                if (btn.getAttribute('data-tab') === tabId) {
+                    btn.classList.add('sidebar-item-active');
+                } else {
+                    btn.classList.remove('sidebar-item-active');
+                }
+            });
+        }
+
+        // DATABASE SIMULATION
+        const initialUsers = [
+            { name: 'Hasrul', email: 'hasrul@aitthemes.com', role: 'Admin', status: 'Active', date: '2026-01-10', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=64&q=80' }
+        ];
+
+        const initialTransactions = [
+            { invoice: '#INV-8492', customer: 'Diana Putri', item: 'Apex Modern E-Commerce', price: 349000, date: '2026-05-28', status: 'Success' },
+            { invoice: '#INV-8491', customer: 'Budi Sutrisno', item: 'Minimalist Portfolio Clean', price: 149000, date: '2026-05-27', status: 'Success' },
+            { invoice: '#INV-8490', customer: 'Roni Hidayat', item: 'Startup-Pro Landing Page', price: 249000, date: '2026-05-25', status: 'Success' },
+            { invoice: '#INV-8489', customer: 'Siti Aminah', item: 'BizGrow Corporate Agency', price: 299000, date: '2026-05-24', status: 'Pending' },
+            { invoice: '#INV-8488', customer: 'Ahmad Faisal', item: 'Startup-Pro Landing Page', price: 249000, date: '2026-05-22', status: 'Cancelled' }
+        ];
+
+        function getDB(key, defaults) {
+            if (!localStorage.getItem(key)) {
+                localStorage.setItem(key, JSON.stringify(defaults));
+            }
+            return JSON.parse(localStorage.getItem(key));
+        }
+
+        let users = getDB('ait_users', initialUsers);
+        let transactions = getDB('ait_transactions', initialTransactions);
+
+        function initProfileDisplay() {
+            const adminUser = users.find(u => u.role === 'Admin') || users[0];
+            const userName = adminUser.name;
+            const userAvatar = adminUser.avatar;
+
+            document.getElementById('mobile-user-name').innerText = userName;
+            document.getElementById('desktop-user-name').innerText = userName;
+            document.getElementById('header-user-name').innerText = userName;
+            
+            document.getElementById('mobile-user-avatar').src = userAvatar;
+            document.getElementById('desktop-user-avatar').src = userAvatar;
+            document.getElementById('header-user-avatar').src = userAvatar;
+        }
+
+        // TRANSACTIONS METHOD
+        function renderTransactions() {
+            const tbody = document.getElementById('trx-table-tbody');
+            const search = document.getElementById('trx-search').value.toLowerCase();
+            const filter = document.getElementById('trx-status-filter').value;
+            tbody.innerHTML = '';
+
+            let filtered = transactions.filter(t => t.invoice.toLowerCase().includes(search) || t.customer.toLowerCase().includes(search) || t.item.toLowerCase().includes(search));
+            if (filter !== 'All') {
+                filtered = filtered.filter(t => t.status === filter);
+            }
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="py-12 text-center text-slate-400">
+                            <i data-lucide="frown" class="w-10 h-10 mx-auto mb-2"></i>
+                            Transactions not found.
+                        </td>
+                    </tr>
+                `;
+                lucide.createIcons();
+                return;
+            }
+
+            filtered.forEach(t => {
+                let badgeClass = '';
+                if (t.status === 'Success') badgeClass = 'bg-emerald-50 text-emerald-600 dark:bg-emerald-950/30 dark:text-emerald-400 border-emerald-100 dark:border-emerald-900/50';
+                else if (t.status === 'Pending') badgeClass = 'bg-amber-50 text-amber-600 dark:bg-amber-950/30 dark:text-amber-400 border-amber-100 dark:border-amber-900/50';
+                else badgeClass = 'bg-rose-50 text-rose-600 dark:bg-rose-950/30 dark:text-rose-400 border-rose-100 dark:border-rose-900/50';
+
+                tbody.innerHTML += `
+                    <tr class="border-b border-slate-100 dark:border-slate-700/50 hover:bg-slate-50/50 dark:hover:bg-slate-850/50">
+                        <td class="py-3.5 px-6 font-semibold text-slate-800 dark:text-white">${t.invoice}</td>
+                        <td class="py-3.5 px-6">${t.customer}</td>
+                        <td class="py-3.5 px-6 font-semibold">${t.item}</td>
+                        <td class="py-3.5 px-6">${t.date}</td>
+                        <td class="py-3.5 px-6 text-right font-bold text-slate-850 dark:text-white">Rp ${t.price.toLocaleString('id-ID')}</td>
+                        <td class="py-3.5 px-6 text-center">
+                            <span class="px-2.5 py-1 text-xs border rounded-full font-semibold ${badgeClass}">
+                                ${t.status}
+                            </span>
+                        </td>
+                    </tr>
+                `;
+            });
+            lucide.createIcons();
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const isMinimized = localStorage.getItem('sidebar-minimized') === 'true';
+            if (isMinimized) {
+                document.body.classList.add('sidebar-minimized');
+            }
+
+            const cb = window.location.protocol.startsWith('http') ? '?v=' + new Date().getTime() : '';
+            Promise.all([
+                fetch('component/sidebar.html' + cb).then(res => res.text()),
+                fetch('component/navbar.html' + cb).then(res => res.text()),
+                fetch('component/footer.html' + cb).then(res => res.text())
+            ])
+            .then(([sidebarData, navbarData, footerData]) => {
+                document.getElementById('sidebar-placeholder').innerHTML = sidebarData;
+                document.getElementById('navbar-placeholder').innerHTML = navbarData;
+                document.getElementById('footer-placeholder').innerHTML = footerData;
+
+                if (isMinimized) {
+                    const icon = document.getElementById('minimize-icon');
+                    if (icon) {
+                        icon.setAttribute('data-lucide', 'chevron-right');
+                    }
+                }
+
+                initAdminControls();
+                initPage('transactions');
+                initProfileDisplay();
+                renderTransactions();
+            })
+            .catch(error => {
+                console.error('Error loading admin components:', error);
+                initProfileDisplay();
+                renderTransactions();
+            });
+        });
+    </script>
+</body>
+</html>

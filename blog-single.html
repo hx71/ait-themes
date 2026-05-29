@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UI/UX Design Trends 2026 - AIT Themes</title>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#2563eb', // Blue-600
+                        secondary: '#4f46e5', // Indigo-600
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Custom CSS for Animations -->
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-900 dark:text-slate-50 font-sans antialiased overflow-x-hidden transition-colors duration-300">
+
+    <!-- Decorative Background Elements -->
+    <div class="fixed inset-0 z-[-1] overflow-hidden pointer-events-none">
+        <div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-blue-400/20 dark:bg-blue-600/10 blur-[100px]"></div>
+        <div class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-indigo-400/20 dark:bg-indigo-600/10 blur-[100px]"></div>
+    </div>
+
+    <!-- Placeholder for Navbar -->
+    <div id="navbar-placeholder"></div>
+
+    <!-- Single Article Section -->
+    <article class="pt-32 pb-20 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto relative min-h-[70vh]">
+        <!-- Back Button -->
+        <a href="blog.html" class="inline-flex items-center gap-2 text-sm font-medium text-slate-500 hover:text-blue-600 dark:text-slate-400 dark:hover:text-blue-400 mb-8 transition-colors group">
+            <i data-lucide="arrow-left" class="w-4 h-4 group-hover:-translate-x-1 transition-transform"></i> Back to Blog
+        </a>
+
+        <!-- Article Header -->
+        <header class="mb-8 reveal">
+            <span class="inline-block px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 text-sm font-semibold rounded-full mb-4 shadow-sm border border-blue-200/50 dark:border-blue-800/50">UI/UX Design</span>
+            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 dark:text-white leading-tight mb-6">UI/UX Design Trends That Will Dominate in 2026</h1>
+            
+            <div class="flex items-center gap-4 text-sm text-slate-600 dark:text-slate-400">
+                <div class="flex items-center gap-2">
+                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=32&q=80" alt="Penulis" class="w-8 h-8 rounded-full object-cover border border-slate-200 dark:border-slate-700">
+                    <span class="font-medium text-slate-900 dark:text-white">Amanda Lee</span>
+                </div>
+                <span class="w-1 h-1 rounded-full bg-slate-300 dark:bg-slate-700"></span>
+                <span>May 24, 2026</span>
+                <span class="w-1 h-1 rounded-full bg-slate-300 dark:bg-slate-700"></span>
+                <span>5 Min Read</span>
+            </div>
+        </header>
+
+        <!-- Cover Image -->
+        <div class="mb-12 reveal delay-100">
+            <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" alt="Sampul Artikel" class="w-full rounded-[2rem] shadow-xl border border-slate-200 dark:border-slate-700 object-cover aspect-video">
+        </div>
+
+        <!-- Article Content -->
+        <div class="text-slate-600 dark:text-slate-400 space-y-6 leading-relaxed text-lg reveal delay-200">
+            <p>In a rapidly evolving digital world, UI/UX design is always finding new ways to deliver more intuitive, efficient, and engaging experiences for users. Entering 2026, we see a shift in focus from mere aesthetics to highly personalized, AI-driven designs.</p>
+            
+            <h2 class="text-2xl font-bold text-slate-900 dark:text-white mt-10 mb-4">1. AI-Powered Personalization</h2>
+            <p>Users are no longer satisfied with a one-size-fits-all experience. Modern interfaces are now expected to adapt in real-time based on user behavior, preferences, and context. AI enables interfaces to learn from users, showing the most relevant navigation or content at the right time.</p>
+
+            <blockquote class="border-l-4 border-blue-600 text-slate-700 dark:text-slate-300 italic my-8 bg-slate-50 dark:bg-slate-800 p-6 rounded-r-2xl shadow-sm">
+                "The best interface design is the one that is almost invisible; it just works exactly as the user needs it at that moment without making them think."
+            </blockquote>
+
+            <h2 class="text-2xl font-bold text-slate-900 dark:text-white mt-10 mb-4">2. Meaningful Micro-Interactions</h2>
+            <p>Small animations when pressing a button, loading a page, or sliding a menu may seem trivial. However, these micro-interactions provide crucial visual feedback and make the application feel much more "alive" and responsive.</p>
+
+            <p>Applying these trends is not just about making a visually beautiful product, but also about building products that truly solve user problems in the most pleasant and memorable way.</p>
+        </div>
+    </article>
+
+    <!-- Placeholder for Footer -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Scripts -->
+    <script>
+        const cb = window.location.protocol.startsWith('http') ? '?v=' + new Date().getTime() : '';
+        Promise.all([
+            fetch('components/navbar.html' + cb).then(res => res.text()),
+            fetch('components/footer.html' + cb).then(res => res.text())
+        ]).then(([navbarData, footerData]) => {
+            document.getElementById('navbar-placeholder').innerHTML = navbarData;
+            document.getElementById('footer-placeholder').innerHTML = footerData;
+            const script = document.createElement('script'); script.src = 'assets/js/main.js'; document.body.appendChild(script);
+        }).catch(error => console.error('Error loading components:', error));
+    </script>
+</body>
+</html>

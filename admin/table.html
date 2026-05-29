@@ -1,0 +1,1107 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tables Preview - AIT Themes</title>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#2563eb', // Blue-600
+                        secondary: '#4f46e5', // Indigo-600
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Custom CSS for Scrollbars & Animations -->
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <style>
+        .fade-in {
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .sidebar-item-active {
+            background-color: #eff6ff;
+            color: #2563eb;
+            font-weight: 600;
+            border-left: 4px solid #2563eb;
+        }
+        .dark .sidebar-item-active {
+            background-color: rgba(37, 99, 235, 0.15);
+            color: #60a5fa;
+            border-left: 4px solid #3b82f6;
+        }
+
+        /* Sidebar Minimized state */
+        @media (min-width: 1024px) {
+            body.sidebar-minimized #desktop-sidebar {
+                width: 5rem; /* w-20 */
+            }
+            body.sidebar-minimized #main-content-wrapper {
+                padding-left: 5rem; /* lg:pl-20 */
+            }
+            body.sidebar-minimized #desktop-sidebar #desktop-logo-text,
+            body.sidebar-minimized #desktop-sidebar nav span,
+            body.sidebar-minimized #desktop-sidebar .tab-btn-text,
+            body.sidebar-minimized #desktop-sidebar #desktop-user-info,
+            body.sidebar-minimized #desktop-sidebar #desktop-logout-text {
+                display: none;
+            }
+            body.sidebar-minimized #desktop-sidebar .tab-btn {
+                justify-content: center;
+                padding-left: 0;
+                padding-right: 0;
+                gap: 0;
+            }
+            body.sidebar-minimized #desktop-sidebar #desktop-user-card {
+                justify-content: center;
+                padding: 0.5rem;
+            }
+            body.sidebar-minimized #desktop-sidebar #desktop-logout-btn {
+                justify-content: center;
+                padding: 0.5rem;
+                width: 2.75rem;
+                height: 2.75rem;
+                border-radius: 9999px;
+            }
+            body.sidebar-minimized #desktop-sidebar .h-16 {
+                justify-content: center;
+                padding-left: 0;
+                padding-right: 0;
+            }
+            body.sidebar-minimized #desktop-sidebar #minimize-sidebar-btn {
+                position: absolute;
+                right: -0.75rem;
+                top: 1.25rem;
+                background-color: white;
+                border: 1px solid rgb(226, 232, 240);
+                box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+                z-index: 50;
+                border-radius: 9999px;
+            }
+            body.sidebar-minimized.dark #desktop-sidebar #minimize-sidebar-btn {
+                background-color: rgb(30, 41, 59);
+                border-color: rgb(51, 65, 85);
+                box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.5);
+            }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-900 dark:text-slate-50 font-sans antialiased transition-colors duration-300">
+
+    <!-- Sidebar Placeholder -->
+    <div id="sidebar-placeholder"></div>
+
+    <!-- Main Content Wrapper -->
+    <div id="main-content-wrapper" class="lg:pl-64 flex flex-col min-h-screen bg-slate-50 dark:bg-slate-900 transition-all duration-300">
+        
+        <!-- Top Navbar Header Placeholder -->
+        <div id="navbar-placeholder"></div>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto space-y-6">
+
+            <!-- ================= TAB: TABLE (UTILITIES) ================= -->
+            <section id="tab-table" class="tab-pane fade-in space-y-6">
+                
+                <!-- 1. Paginated Interactive Datatable -->
+                <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200/50 dark:border-slate-700/50 shadow-sm space-y-6">
+                    <!-- Title and Add Button Row -->
+                    <div class="flex justify-between items-start gap-4">
+                        <div>
+                            <h4 class="font-bold text-slate-800 dark:text-white flex items-center gap-2">
+                                <i data-lucide="database" class="w-5 h-5 text-blue-600"></i> Support Tickets Registry (CRUD)
+                            </h4>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Client-side searchable, filterable, paginated datatable with full Create, Read, Update, and Delete actions.</p>
+                        </div>
+                        <button onclick="openAddTicketModal()" class="px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl text-xs font-bold hover:shadow-lg hover:shadow-blue-500/20 flex items-center gap-1.5 transition-all shrink-0 ml-auto">
+                            <i data-lucide="plus" class="w-3.5 h-3.5"></i> Add Ticket
+                        </button>
+                    </div>
+
+                    <!-- Search & Filter Options Row (Below Title) -->
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div class="relative max-w-xs w-full">
+                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                                <i data-lucide="search" class="w-4 h-4"></i>
+                            </span>
+                            <input id="table-search" type="text" oninput="handleSearch(this.value)" placeholder="Search tickets..." class="block w-full pl-9 pr-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-xs transition-all">
+                        </div>
+                        
+                        <div class="flex rounded-xl bg-slate-100 dark:bg-slate-900 p-1 border border-slate-200/50 dark:border-slate-700/50 shrink-0">
+                            <button onclick="setStatusFilter('All')" id="btn-filter-all" class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-white dark:bg-slate-800 shadow-sm text-slate-900 dark:text-white transition-all">All</button>
+                            <button onclick="setStatusFilter('Open')" id="btn-filter-open" class="px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all">Open</button>
+                            <button onclick="setStatusFilter('In Progress')" id="btn-filter-progress" class="px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all">In Progress</button>
+                            <button onclick="setStatusFilter('Closed')" id="btn-filter-closed" class="px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all">Closed</button>
+                        </div>
+                    </div>
+
+                    <!-- Datatable Area -->
+                    <div class="overflow-x-auto border border-slate-100 dark:border-slate-700 rounded-xl">
+                        <table class="w-full text-left text-sm whitespace-nowrap">
+                            <thead>
+                                <tr class="bg-slate-50 dark:bg-slate-900/50 border-b border-slate-100 dark:border-slate-700 text-slate-500 dark:text-slate-400 font-semibold">
+                                    <th class="py-3 px-4">Ticket ID</th>
+                                    <th class="py-3 px-4">Subject</th>
+                                    <th class="py-3 px-4">User</th>
+                                    <th class="py-3 px-4">Date</th>
+                                    <th class="py-3 px-4">Priority</th>
+                                    <th class="py-3 px-4">Status</th>
+                                    <th class="py-3 px-4 text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ticket-table-body" class="divide-y divide-slate-100 dark:divide-slate-700/50 text-slate-700 dark:text-slate-300">
+                                <!-- Loaded dynamically via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Pagination Footer Control -->
+                    <div class="flex flex-col sm:flex-row justify-between items-center gap-4 pt-2">
+                        <span id="table-info" class="text-xs text-slate-500 dark:text-slate-400">
+                            Showing 0 to 0 of 0 entries
+                        </span>
+                        
+                        <div class="flex items-center gap-1.5" id="pagination-controls">
+                            <!-- Populated dynamically via JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. Table with Form Filter Below Header -->
+                <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200/50 dark:border-slate-700/50 shadow-sm space-y-6">
+                    <div>
+                        <h4 class="font-bold text-slate-800 dark:text-white flex items-center gap-2">
+                            <i data-lucide="sliders-horizontal" class="w-5 h-5 text-emerald-600"></i> Table with Inline Form Filter
+                        </h4>
+                        <p class="text-xs text-slate-500 dark:text-slate-400">Advanced query block featuring filter input fields situated directly below the table header.</p>
+                    </div>
+
+                    <!-- Inline Filter Form -->
+                    <div class="p-4 bg-slate-100/50 dark:bg-slate-900/50 rounded-2xl border border-slate-100 dark:border-slate-700/50">
+                        <form id="inline-filter-form" onsubmit="event.preventDefault();" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                            <div>
+                                <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1">Subject Description</label>
+                                <input id="filter-inline-subject" type="text" oninput="applyInlineFilters()" placeholder="Filter by subject..." class="block w-full px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-850 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none text-xs transition-all">
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1">Submitter / User</label>
+                                <input id="filter-inline-user" type="text" oninput="applyInlineFilters()" placeholder="Filter by user..." class="block w-full px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-850 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none text-xs transition-all">
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1">Priority</label>
+                                <select id="filter-inline-priority" onchange="applyInlineFilters()" class="block w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-850 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none text-xs transition-all">
+                                    <option value="All">All Priorities</option>
+                                    <option value="Low">Low</option>
+                                    <option value="Medium">Medium</option>
+                                    <option value="High">High</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1">Status</label>
+                                <select id="filter-inline-status" onchange="applyInlineFilters()" class="block w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-850 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none text-xs transition-all">
+                                    <option value="All">All Statuses</option>
+                                    <option value="Open">Open</option>
+                                    <option value="In Progress">In Progress</option>
+                                    <option value="Closed">Closed</option>
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Filtered Table -->
+                    <div class="overflow-x-auto border border-slate-100 dark:border-slate-700 rounded-xl">
+                        <table class="w-full text-left text-sm whitespace-nowrap">
+                            <thead>
+                                <tr class="bg-slate-50 dark:bg-slate-900/50 border-b border-slate-100 dark:border-slate-700 text-slate-500 dark:text-slate-400 font-semibold">
+                                    <th class="py-3 px-4">Ticket ID</th>
+                                    <th class="py-3 px-4">Subject</th>
+                                    <th class="py-3 px-4">User</th>
+                                    <th class="py-3 px-4">Priority</th>
+                                    <th class="py-3 px-4">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="inline-filter-table-body" class="divide-y divide-slate-100 dark:divide-slate-700/50">
+                                <!-- Loaded dynamically via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 3. Bordered & Hover Highlight Table Variant -->
+                <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200/50 dark:border-slate-700/50 shadow-sm space-y-4">
+                    <div>
+                        <h4 class="font-bold text-slate-800 dark:text-white flex items-center gap-2">
+                            <i data-lucide="layout-grid" class="w-5 h-5 text-indigo-600"></i> Bordered & Hover Highlight Style
+                        </h4>
+                        <p class="text-xs text-slate-500 dark:text-slate-400">Compact styling version with border dividers and row highlight overlays.</p>
+                    </div>
+
+                    <div class="overflow-x-auto border border-slate-200 dark:border-slate-700 rounded-xl">
+                        <table class="w-full text-left text-xs border-collapse divide-y divide-slate-200 dark:divide-slate-700">
+                            <thead>
+                                <tr class="bg-slate-100 dark:bg-slate-900 text-slate-700 dark:text-slate-300 font-bold">
+                                    <th class="py-2.5 px-4 border-r border-slate-200 dark:border-slate-700">System Log</th>
+                                    <th class="py-2.5 px-4 border-r border-slate-200 dark:border-slate-700">Category</th>
+                                    <th class="py-2.5 px-4 border-r border-slate-200 dark:border-slate-700">Event Origin</th>
+                                    <th class="py-2.5 px-4">Response Time</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-200 dark:divide-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+                                <tr class="hover:bg-slate-50 dark:hover:bg-slate-750 transition-colors">
+                                    <td class="py-2.5 px-4 border-r border-slate-200 dark:border-slate-700 font-mono">DB backup routine initiated</td>
+                                    <td class="py-2.5 px-4 border-r border-slate-200 dark:border-slate-700">Backup Cron</td>
+                                    <td class="py-2.5 px-4 border-r border-slate-200 dark:border-slate-700">US-West Node 1</td>
+                                    <td class="py-2.5 px-4 font-semibold text-emerald-600">242ms</td>
+                                </tr>
+                                <tr class="hover:bg-slate-50 dark:hover:bg-slate-750 transition-colors">
+                                    <td class="py-2.5 px-4 border-r border-slate-200 dark:border-slate-700 font-mono">Auth token verification failed</td>
+                                    <td class="py-2.5 px-4 border-r border-slate-200 dark:border-slate-700">Security Gate</td>
+                                    <td class="py-2.5 px-4 border-r border-slate-200 dark:border-slate-700">API Gateway</td>
+                                    <td class="py-2.5 px-4 font-semibold text-rose-600">12ms</td>
+                                </tr>
+                                <tr class="hover:bg-slate-50 dark:hover:bg-slate-750 transition-colors">
+                                    <td class="py-2.5 px-4 border-r border-slate-200 dark:border-slate-700 font-mono">Chart.js CDN resources loaded</td>
+                                    <td class="py-2.5 px-4 border-r border-slate-200 dark:border-slate-700">CDN Sync</td>
+                                    <td class="py-2.5 px-4 border-r border-slate-200 dark:border-slate-700">Client UI Context</td>
+                                    <td class="py-2.5 px-4 font-semibold text-amber-600">1.2s</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- Footer Placeholder -->
+            <div id="footer-placeholder"></div>
+        </main>
+    </div>
+
+    <!-- ================= 1. CREATE TICKET MODAL ================= -->
+    <div id="add-ticket-modal" class="fixed inset-0 z-50 overflow-y-auto hidden">
+        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 transition-opacity bg-slate-900/50 backdrop-blur-sm" onclick="closeAddTicketModal()"></div>
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen">&#8203;</span>
+            
+            <div id="add-ticket-modal-card" class="inline-block align-bottom bg-white dark:bg-slate-800 rounded-3xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full border border-slate-200/50 dark:border-slate-700/50 scale-95 opacity-0 duration-300">
+                <div class="p-6">
+                    <div class="flex justify-between items-center pb-4 border-b border-slate-100 dark:border-slate-700">
+                        <h4 class="text-lg font-bold text-slate-900 dark:text-white">Create New Support Ticket</h4>
+                        <button onclick="closeAddTicketModal()" class="p-1 rounded-lg text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700">
+                            <i data-lucide="x" class="w-5 h-5"></i>
+                        </button>
+                    </div>
+                    
+                    <form onsubmit="submitAddTicket(event)" class="space-y-4 mt-4">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Subject / Issue Description</label>
+                            <input id="add-ticket-subject" type="text" required placeholder="e.g. Tailwind setup failure" class="block w-full px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Submitter Name</label>
+                            <input id="add-ticket-user" type="text" required placeholder="e.g. Ahmad Faisal" class="block w-full px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none text-sm">
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Priority</label>
+                                <select id="add-ticket-priority" class="block w-full px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none text-sm">
+                                    <option value="Low">Low</option>
+                                    <option value="Medium">Medium</option>
+                                    <option value="High">High</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Status</label>
+                                <select id="add-ticket-status" class="block w-full px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none text-sm">
+                                    <option value="Open">Open</option>
+                                    <option value="In Progress">In Progress</option>
+                                    <option value="Closed">Closed</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="pt-4 border-t border-slate-100 dark:border-slate-700 flex justify-end gap-3">
+                            <button type="button" onclick="closeAddTicketModal()" class="px-5 py-2 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700 transition-all">
+                                Cancel
+                            </button>
+                            <button type="submit" class="px-5 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl text-xs font-semibold hover:shadow-lg transition-all">
+                                Create Ticket
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= 2. READ / VIEW TICKET MODAL ================= -->
+    <div id="view-ticket-modal" class="fixed inset-0 z-50 overflow-y-auto hidden">
+        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 transition-opacity bg-slate-900/50 backdrop-blur-sm" onclick="closeViewTicketModal()"></div>
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen">&#8203;</span>
+            
+            <div id="view-ticket-modal-card" class="inline-block align-bottom bg-white dark:bg-slate-800 rounded-3xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full border border-slate-200/50 dark:border-slate-700/50 scale-95 opacity-0 duration-300">
+                <div class="p-6 space-y-4">
+                    <div class="flex justify-between items-center pb-3 border-b border-slate-100 dark:border-slate-700">
+                        <h4 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                            <i data-lucide="info" class="w-5 h-5 text-blue-500"></i> Ticket Details
+                        </h4>
+                        <button onclick="closeViewTicketModal()" class="p-1 rounded-lg text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700">
+                            <i data-lucide="x" class="w-5 h-5"></i>
+                        </button>
+                    </div>
+
+                    <div class="space-y-3">
+                        <div class="grid grid-cols-3 text-sm">
+                            <span class="text-slate-400 font-medium">Ticket ID</span>
+                            <span id="view-ticket-id" class="col-span-2 font-semibold text-slate-900 dark:text-white"></span>
+                        </div>
+                        <div class="grid grid-cols-3 text-sm">
+                            <span class="text-slate-400 font-medium">Subject</span>
+                            <span id="view-ticket-subject" class="col-span-2 text-slate-800 dark:text-slate-200"></span>
+                        </div>
+                        <div class="grid grid-cols-3 text-sm">
+                            <span class="text-slate-400 font-medium">Submitter</span>
+                            <span id="view-ticket-user" class="col-span-2 text-slate-800 dark:text-slate-200"></span>
+                        </div>
+                        <div class="grid grid-cols-3 text-sm">
+                            <span class="text-slate-400 font-medium">Date Created</span>
+                            <span id="view-ticket-date" class="col-span-2 text-slate-800 dark:text-slate-200"></span>
+                        </div>
+                        <div class="grid grid-cols-3 text-sm items-center">
+                            <span class="text-slate-400 font-medium">Priority</span>
+                            <div class="col-span-2">
+                                <span id="view-ticket-priority" class="px-2 py-0.5 text-[10px] font-bold border rounded-md"></span>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-3 text-sm items-center">
+                            <span class="text-slate-400 font-medium">Status</span>
+                            <div class="col-span-2">
+                                <span id="view-ticket-status" class="px-2.5 py-1 text-[10px] font-bold border rounded-full"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pt-4 border-t border-slate-100 dark:border-slate-700 flex justify-end">
+                        <button onclick="closeViewTicketModal()" class="px-5 py-2 bg-slate-850 hover:bg-slate-750 dark:bg-slate-700 dark:hover:bg-slate-650 text-white rounded-xl text-xs font-semibold transition-all">
+                            Close details
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= 3. EDIT / UPDATE TICKET MODAL ================= -->
+    <div id="edit-ticket-modal" class="fixed inset-0 z-50 overflow-y-auto hidden">
+        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 transition-opacity bg-slate-900/50 backdrop-blur-sm" onclick="closeEditTicketModal()"></div>
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen">&#8203;</span>
+            
+            <div id="edit-ticket-modal-card" class="inline-block align-bottom bg-white dark:bg-slate-800 rounded-3xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full border border-slate-200/50 dark:border-slate-700/50 scale-95 opacity-0 duration-300">
+                <div class="p-6">
+                    <div class="flex justify-between items-center pb-4 border-b border-slate-100 dark:border-slate-700">
+                        <h4 class="text-lg font-bold text-slate-900 dark:text-white">Edit Support Ticket</h4>
+                        <button onclick="closeEditTicketModal()" class="p-1 rounded-lg text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700">
+                            <i data-lucide="x" class="w-5 h-5"></i>
+                        </button>
+                    </div>
+                    
+                    <form onsubmit="submitEditTicket(event)" class="space-y-4 mt-4">
+                        <input id="edit-ticket-id" type="hidden">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Subject / Issue Description</label>
+                            <input id="edit-ticket-subject" type="text" required class="block w-full px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Submitter Name</label>
+                            <input id="edit-ticket-user" type="text" required class="block w-full px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none text-sm">
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Priority</label>
+                                <select id="edit-ticket-priority" class="block w-full px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none text-sm">
+                                    <option value="Low">Low</option>
+                                    <option value="Medium">Medium</option>
+                                    <option value="High">High</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Status</label>
+                                <select id="edit-ticket-status" class="block w-full px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none text-sm">
+                                    <option value="Open">Open</option>
+                                    <option value="In Progress">In Progress</option>
+                                    <option value="Closed">Closed</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="pt-4 border-t border-slate-100 dark:border-slate-700 flex justify-end gap-3">
+                            <button type="button" onclick="closeEditTicketModal()" class="px-5 py-2 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700 transition-all">
+                                Cancel
+                            </button>
+                            <button type="submit" class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-semibold hover:shadow-lg transition-all">
+                                Save Updates
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function closeSidebar() {
+            const mobileSidebar = document.getElementById('mobile-sidebar');
+            const backdrop = document.getElementById('mobile-sidebar-backdrop');
+            if (mobileSidebar && backdrop) {
+                mobileSidebar.classList.add('-translate-x-full');
+                backdrop.classList.remove('opacity-100');
+                setTimeout(() => { backdrop.classList.add('hidden'); }, 300);
+            }
+        }
+
+        function toggleSidebarMinimize() {
+            const body = document.body;
+            body.classList.toggle('sidebar-minimized');
+            
+            const isMinimized = body.classList.contains('sidebar-minimized');
+            localStorage.setItem('sidebar-minimized', isMinimized ? 'true' : 'false');
+            
+            const icon = document.getElementById('minimize-icon');
+            if (icon) {
+                icon.setAttribute('data-lucide', isMinimized ? 'chevron-right' : 'chevron-left');
+                if (window.lucide) {
+                    window.lucide.createIcons();
+                }
+            }
+        }
+
+        function initAdminControls() {
+            lucide.createIcons();
+            const openMobileBtn = document.getElementById('open-mobile-sidebar-btn');
+            const closeMobileBtn = document.getElementById('close-mobile-sidebar-btn');
+            const mobileSidebar = document.getElementById('mobile-sidebar');
+            const backdrop = document.getElementById('mobile-sidebar-backdrop');
+
+            if (openMobileBtn) openMobileBtn.addEventListener('click', () => {
+                mobileSidebar.classList.remove('-translate-x-full');
+                backdrop.classList.remove('hidden');
+                setTimeout(() => { backdrop.classList.add('opacity-100'); }, 10);
+            });
+            if (closeMobileBtn) closeMobileBtn.addEventListener('click', closeSidebar);
+            if (backdrop) backdrop.addEventListener('click', closeSidebar);
+
+            // Dark Mode Logic
+            const htmlElement = document.documentElement;
+            const themeBtn = document.getElementById('theme-toggle');
+            
+            if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                htmlElement.classList.add('dark');
+                updateThemeIcons('dark');
+            } else {
+                htmlElement.classList.remove('dark');
+                updateThemeIcons('light');
+            }
+
+            function updateThemeIcons(theme) {
+                const iconDark = document.getElementById('theme-icon-dark');
+                const iconLight = document.getElementById('theme-icon-light');
+                if (theme === 'dark') {
+                    if (iconDark) iconDark.classList.remove('hidden');
+                    if (iconLight) iconLight.classList.add('hidden');
+                } else {
+                    if (iconDark) iconDark.classList.add('hidden');
+                    if (iconLight) iconLight.classList.remove('hidden');
+                }
+            }
+
+            if (themeBtn) {
+                themeBtn.addEventListener('click', () => {
+                    let activeTheme = 'light';
+                    if (htmlElement.classList.contains('dark')) {
+                        htmlElement.classList.remove('dark');
+                        localStorage.setItem('color-theme', 'light');
+                    } else {
+                        htmlElement.classList.add('dark');
+                        localStorage.setItem('color-theme', 'dark');
+                        activeTheme = 'dark';
+                    }
+                    updateThemeIcons(activeTheme);
+                });
+            }
+        }
+
+        function initPage(tabId) {
+            const titleMap = {
+                'overview': 'Analytics Overview',
+                'themes': 'Digital Themes Management',
+                'users': 'User Management',
+                'transactions': 'Transaction History Log',
+                'settings': 'Dashboard Settings',
+                'form': 'Form Elements Preview',
+                'form-wizard': 'Form Wizard Stepper',
+                'select': 'Select Elements Preview',
+                'datepicker': 'Date & Time Pickers',
+                'modal': 'Interactive Modals Preview',
+                'alert': 'Alert Panels & Badges',
+                'table': 'Paginated Data Table'
+            };
+            
+            const pageTitle = document.getElementById('page-title');
+            if (pageTitle) {
+                pageTitle.innerText = titleMap[tabId] || 'Dashboard';
+            }
+
+            const btns = document.querySelectorAll('.tab-btn');
+            btns.forEach(btn => {
+                if (btn.getAttribute('data-tab') === tabId) {
+                    btn.classList.add('sidebar-item-active');
+                } else {
+                    btn.classList.remove('sidebar-item-active');
+                }
+            });
+        }
+
+        // DATABASE SIMULATION
+        const initialUsers = [
+            { name: 'Hasrul', email: 'hasrul@aitthemes.com', role: 'Admin', status: 'Active', date: '2026-01-10', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=64&q=80' }
+        ];
+
+        function getDB(key, defaults) {
+            if (!localStorage.getItem(key)) {
+                localStorage.setItem(key, JSON.stringify(defaults));
+            }
+            return JSON.parse(localStorage.getItem(key));
+        }
+
+        let users = getDB('ait_users', initialUsers);
+
+        function initProfileDisplay() {
+            const adminUser = users.find(u => u.role === 'Admin') || users[0];
+            const userName = adminUser.name;
+            const userAvatar = adminUser.avatar;
+
+            document.getElementById('mobile-user-name').innerText = userName;
+            document.getElementById('desktop-user-name').innerText = userName;
+            document.getElementById('header-user-name').innerText = userName;
+            
+            document.getElementById('mobile-user-avatar').src = userAvatar;
+            document.getElementById('desktop-user-avatar').src = userAvatar;
+            document.getElementById('header-user-avatar').src = userAvatar;
+        }
+
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `p-4 rounded-2xl shadow-xl flex items-center gap-3 bg-white dark:bg-slate-800 border border-slate-200/50 dark:border-slate-700/50 text-slate-800 dark:text-white text-sm pointer-events-auto fade-in transition-all duration-300`;
+            
+            let iconMarkup = '';
+            if (type === 'success') {
+                iconMarkup = `<div class="w-8 h-8 rounded-xl bg-emerald-100 dark:bg-emerald-950 flex items-center justify-center text-emerald-600 dark:text-emerald-400 shrink-0"><i data-lucide="check-circle" class="w-5 h-5"></i></div>`;
+            } else if (type === 'warning') {
+                iconMarkup = `<div class="w-8 h-8 rounded-xl bg-amber-100 dark:bg-amber-950 flex items-center justify-center text-amber-600 dark:text-amber-400 shrink-0"><i data-lucide="alert-triangle" class="w-5 h-5"></i></div>`;
+            } else if (type === 'danger') {
+                iconMarkup = `<div class="w-8 h-8 rounded-xl bg-rose-100 dark:bg-rose-950 flex items-center justify-center text-rose-600 dark:text-rose-400 shrink-0"><i data-lucide="trash-2" class="w-5 h-5"></i></div>`;
+            } else {
+                iconMarkup = `<div class="w-8 h-8 rounded-xl bg-rose-100 dark:bg-rose-950 flex items-center justify-center text-rose-600 dark:text-rose-400 shrink-0"><i data-lucide="alert-circle" class="w-5 h-5"></i></div>`;
+            }
+
+            toast.innerHTML = `
+                ${iconMarkup}
+                <div class="flex-1 font-medium">${message}</div>
+                <button class="text-slate-400 hover:text-slate-600 dark:hover:text-white" onclick="this.parentElement.remove()">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            `;
+
+            container.appendChild(toast);
+            lucide.createIcons();
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-2');
+                setTimeout(() => { toast.remove(); }, 300);
+            }, 4000);
+        }
+
+        // =============================================================
+        // DATATABLE CONFIGURATION & DYNAMIC CRUD LOGIC
+        // =============================================================
+        const initialTickets = [
+            { id: '#TKT-1001', subject: 'Theme download failed', user: 'Diana Putri', date: '2026-05-29', priority: 'High', status: 'Open' },
+            { id: '#TKT-1002', subject: 'Custom font support', user: 'Budi Sutrisno', date: '2026-05-28', priority: 'Medium', status: 'Closed' },
+            { id: '#TKT-1003', subject: 'Invoice not received', user: 'Roni Hidayat', date: '2026-05-28', priority: 'Low', status: 'In Progress' },
+            { id: '#TKT-1004', subject: 'License key reset request', user: 'Siti Aminah', date: '2026-05-27', priority: 'High', status: 'Open' },
+            { id: '#TKT-1005', subject: 'Bootstrap grid alignment bug', user: 'Ahmad Faisal', date: '2026-05-27', priority: 'Medium', status: 'Closed' },
+            { id: '#TKT-1006', subject: 'Refund request for Apex theme', user: 'Agus Santoso', date: '2026-05-26', priority: 'High', status: 'In Progress' },
+            { id: '#TKT-1007', subject: 'Dark mode styling issue', user: 'Megawati', date: '2026-05-26', priority: 'Low', status: 'Closed' },
+            { id: '#TKT-1008', subject: 'SaaS template load speed', user: 'Wawan', date: '2026-05-25', priority: 'Medium', status: 'Open' },
+            { id: '#TKT-1009', subject: 'Pre-sales discount query', user: 'Hendra', date: '2026-05-25', priority: 'Low', status: 'Open' },
+            { id: '#TKT-1010', subject: 'Logo customization request', user: 'Yanti', date: '2026-05-24', priority: 'Medium', status: 'Closed' },
+            { id: '#TKT-1011', subject: 'Broken link on landing page', user: 'Joko', date: '2026-05-24', priority: 'High', status: 'Closed' },
+            { id: '#TKT-1012', subject: 'Affiliate program details', user: 'Rina', date: '2026-05-23', priority: 'Low', status: 'Open' },
+            { id: '#TKT-1013', subject: 'Responsive menu on mobile safari', user: 'Toni', date: '2026-05-23', priority: 'High', status: 'In Progress' },
+            { id: '#TKT-1014', subject: 'Tailwind config setup failure', user: 'Lina', date: '2026-05-22', priority: 'Medium', status: 'Closed' },
+            { id: '#TKT-1015', subject: 'Partnership offer email', user: 'Dedi', date: '2026-05-22', priority: 'Low', status: 'Open' }
+        ];
+
+        let tickets = getDB('ait_tickets', initialTickets);
+        let filteredTickets = [...tickets];
+        let currentPage = 1;
+        const itemsPerPage = 5;
+        let activeStatusFilter = 'All';
+        let activeSearchQuery = '';
+
+        function setStatusFilter(status) {
+            activeStatusFilter = status;
+            
+            const buttons = {
+                'All': 'btn-filter-all',
+                'Open': 'btn-filter-open',
+                'In Progress': 'btn-filter-progress',
+                'Closed': 'btn-filter-closed'
+            };
+            
+            Object.keys(buttons).forEach(key => {
+                const btn = document.getElementById(buttons[key]);
+                if (key === status) {
+                    btn.className = "px-3 py-1.5 rounded-lg text-xs font-semibold bg-white dark:bg-slate-800 shadow-sm text-slate-900 dark:text-white transition-all";
+                } else {
+                    btn.className = "px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-all";
+                }
+            });
+
+            currentPage = 1;
+            applyDataFilters();
+            showToast(`Filtered by status: ${status}`, 'success');
+        }
+
+        function handleSearch(val) {
+            activeSearchQuery = val.toLowerCase().trim();
+            currentPage = 1;
+            applyDataFilters();
+        }
+
+        // Inline Filter Table Logic
+        function applyInlineFilters() {
+            const subjectVal = document.getElementById('filter-inline-subject').value.toLowerCase().trim();
+            const userVal = document.getElementById('filter-inline-user').value.toLowerCase().trim();
+            const priorityVal = document.getElementById('filter-inline-priority').value;
+            const statusVal = document.getElementById('filter-inline-status').value;
+
+            // Load freshest database
+            const currentTickets = getDB('ait_tickets', initialTickets);
+
+            const filtered = currentTickets.filter(t => {
+                const matchesSubject = !subjectVal || t.subject.toLowerCase().includes(subjectVal);
+                const matchesUser = !userVal || t.user.toLowerCase().includes(userVal);
+                const matchesPriority = (priorityVal === 'All' || t.priority === priorityVal);
+                const matchesStatus = (statusVal === 'All' || t.status === statusVal);
+                return matchesSubject && matchesUser && matchesPriority && matchesStatus;
+            });
+
+            const tbody = document.getElementById('inline-filter-table-body');
+            tbody.innerHTML = '';
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="5" class="py-8 text-center text-xs text-slate-400 dark:text-slate-500">
+                            No tickets match the inline filters.
+                        </td>
+                    </tr>
+                `;
+            } else {
+                filtered.forEach(t => {
+                    let pClass = '';
+                    if (t.priority === 'High') pClass = 'bg-rose-50 text-rose-600 dark:bg-rose-950/30 dark:text-rose-400 border-rose-100 dark:border-rose-900/50';
+                    else if (t.priority === 'Medium') pClass = 'bg-amber-50 text-amber-600 dark:bg-amber-950/30 dark:text-amber-400 border-amber-100 dark:border-amber-900/50';
+                    else pClass = 'bg-blue-50 text-blue-600 dark:bg-blue-950/30 dark:text-blue-400 border-blue-100 dark:border-blue-900/50';
+
+                    let sClass = '';
+                    if (t.status === 'Open') sClass = 'border-emerald-500/30 dark:border-emerald-500/20 text-emerald-600 dark:text-emerald-400';
+                    else if (t.status === 'In Progress') sClass = 'border-amber-500/30 dark:border-amber-500/20 text-amber-600 dark:text-amber-400';
+                    else sClass = 'bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400 border-transparent';
+
+                    tbody.innerHTML += `
+                        <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
+                            <td class="py-3 px-4 font-semibold text-slate-800 dark:text-white text-xs">${t.id}</td>
+                            <td class="py-3 px-4 text-xs font-medium text-slate-900 dark:text-slate-100">${t.subject}</td>
+                            <td class="py-3 px-4 text-xs">${t.user}</td>
+                            <td class="py-3 px-4">
+                                <span class="px-2 py-0.5 text-[10px] font-bold border rounded-md ${pClass}">
+                                    ${t.priority}
+                                </span>
+                            </td>
+                            <td class="py-3 px-4">
+                                <span class="px-2.5 py-1 text-[10px] font-bold border rounded-full ${sClass}">
+                                    ${t.status}
+                                </span>
+                            </td>
+                        </tr>
+                    `;
+                });
+            }
+        }
+
+        function applyDataFilters() {
+            tickets = getDB('ait_tickets', initialTickets);
+            filteredTickets = tickets.filter(t => {
+                const matchesStatus = (activeStatusFilter === 'All' || t.status === activeStatusFilter);
+                const matchesSearch = !activeSearchQuery || 
+                    t.id.toLowerCase().includes(activeSearchQuery) || 
+                    t.subject.toLowerCase().includes(activeSearchQuery) || 
+                    t.user.toLowerCase().includes(activeSearchQuery);
+                
+                return matchesStatus && matchesSearch;
+            });
+
+            renderTableData();
+            applyInlineFilters(); // Synchronizes the second table
+        }
+
+        function renderTableData() {
+            const tbody = document.getElementById('ticket-table-body');
+            tbody.innerHTML = '';
+
+            const totalItems = filteredTickets.length;
+            const totalPages = Math.ceil(totalItems / itemsPerPage) || 1;
+            
+            if (currentPage > totalPages) currentPage = totalPages;
+            if (currentPage < 1) currentPage = 1;
+
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
+            
+            const visibleItems = filteredTickets.slice(startIndex, endIndex);
+
+            if (visibleItems.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="py-8 text-center text-xs text-slate-400 dark:text-slate-500">
+                            No tickets match your query.
+                        </td>
+                    </tr>
+                `;
+            } else {
+                visibleItems.forEach(t => {
+                    let pClass = '';
+                    if (t.priority === 'High') pClass = 'bg-rose-50 text-rose-600 dark:bg-rose-950/30 dark:text-rose-400 border-rose-100 dark:border-rose-900/50';
+                    else if (t.priority === 'Medium') pClass = 'bg-amber-50 text-amber-600 dark:bg-amber-950/30 dark:text-amber-400 border-amber-100 dark:border-amber-900/50';
+                    else pClass = 'bg-blue-50 text-blue-600 dark:bg-blue-950/30 dark:text-blue-400 border-blue-100 dark:border-blue-900/50';
+
+                    let sClass = '';
+                    if (t.status === 'Open') sClass = 'border-emerald-500/30 dark:border-emerald-500/20 text-emerald-600 dark:text-emerald-400';
+                    else if (t.status === 'In Progress') sClass = 'border-amber-500/30 dark:border-amber-500/20 text-amber-600 dark:text-amber-400';
+                    else sClass = 'bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400 border-transparent';
+
+                    tbody.innerHTML += `
+                        <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
+                            <td class="py-3 px-4 font-semibold text-slate-800 dark:text-white text-xs">${t.id}</td>
+                            <td class="py-3 px-4 text-xs font-medium text-slate-900 dark:text-slate-100">${t.subject}</td>
+                            <td class="py-3 px-4 text-xs">${t.user}</td>
+                            <td class="py-3 px-4 text-xs text-slate-400">${t.date}</td>
+                            <td class="py-3 px-4">
+                                <span class="px-2 py-0.5 text-[10px] font-bold border rounded-md ${pClass}">
+                                    ${t.priority}
+                                </span>
+                            </td>
+                            <td class="py-3 px-4">
+                                <span class="px-2.5 py-1 text-[10px] font-bold border rounded-full ${sClass}">
+                                    ${t.status}
+                                </span>
+                            </td>
+                            <td class="py-3 px-4 text-right">
+                                <div class="flex justify-end gap-1.5">
+                                    <button onclick="readTicket('${t.id}')" class="p-1 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-600 dark:text-slate-300 transition-colors" title="Read Details">
+                                        <i data-lucide="eye" class="w-3.5 h-3.5"></i>
+                                    </button>
+                                    <button onclick="openEditTicketModal('${t.id}')" class="p-1 rounded-lg bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/30 dark:hover:bg-blue-900/50 text-blue-600 dark:text-blue-400 transition-colors" title="Update Ticket">
+                                        <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
+                                    </button>
+                                    <button onclick="deleteTicket('${t.id}')" class="p-1 rounded-lg bg-rose-50 hover:bg-rose-100 dark:bg-rose-900/30 dark:hover:bg-rose-900/50 text-rose-600 dark:text-rose-400 transition-colors" title="Delete Ticket">
+                                        <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                });
+            }
+
+            const displayStart = totalItems === 0 ? 0 : startIndex + 1;
+            const displayEnd = endIndex;
+            document.getElementById('table-info').innerText = `Showing ${displayStart} to ${displayEnd} of ${totalItems} entries`;
+
+            renderPaginationControls(totalPages);
+            lucide.createIcons();
+        }
+
+        function renderPaginationControls(totalPages) {
+            const wrapper = document.getElementById('pagination-controls');
+            wrapper.innerHTML = '';
+
+            const prevDisabled = currentPage === 1 ? 'disabled opacity-50 cursor-not-allowed' : '';
+            wrapper.innerHTML += `
+                <button onclick="changePage(${currentPage - 1})" ${prevDisabled} class="p-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-500 dark:text-slate-400 transition-all">
+                    <i data-lucide="chevron-left" class="w-4 h-4"></i>
+                </button>
+            `;
+
+            for (let i = 1; i <= totalPages; i++) {
+                const isActive = i === currentPage;
+                const activeClasses = isActive 
+                    ? 'bg-blue-600 text-white border-blue-600' 
+                    : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700';
+                
+                wrapper.innerHTML += `
+                    <button onclick="changePage(${i})" class="px-3 py-1.5 rounded-lg border text-xs font-semibold transition-all ${activeClasses}">
+                        ${i}
+                    </button>
+                `;
+            }
+
+            const nextDisabled = currentPage === totalPages ? 'disabled opacity-50 cursor-not-allowed' : '';
+            wrapper.innerHTML += `
+                <button onclick="changePage(${currentPage + 1})" ${nextDisabled} class="p-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-500 dark:text-slate-400 transition-all">
+                    <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                </button>
+            `;
+        }
+
+        function changePage(page) {
+            currentPage = page;
+            renderTableData();
+            showToast(`Page switched to ${page}`, 'success');
+        }
+
+        // =============================================================
+        // CRUD IMPLEMENTATIONS
+        // =============================================================
+        
+        // 1. CREATE TICKET
+        function openAddTicketModal() {
+            const modal = document.getElementById('add-ticket-modal');
+            const card = document.getElementById('add-ticket-modal-card');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                card.classList.remove('scale-95', 'opacity-0');
+                card.classList.add('scale-100', 'opacity-100');
+            }, 50);
+            
+            document.getElementById('add-ticket-subject').value = '';
+            document.getElementById('add-ticket-user').value = '';
+            document.getElementById('add-ticket-priority').value = 'Low';
+            document.getElementById('add-ticket-status').value = 'Open';
+            
+            if (window.lucide) lucide.createIcons();
+        }
+
+        function closeAddTicketModal() {
+            const modal = document.getElementById('add-ticket-modal');
+            const card = document.getElementById('add-ticket-modal-card');
+            card.classList.remove('scale-100', 'opacity-100');
+            card.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => { modal.classList.add('hidden'); }, 300);
+        }
+
+        function submitAddTicket(e) {
+            e.preventDefault();
+            const subject = document.getElementById('add-ticket-subject').value;
+            const user = document.getElementById('add-ticket-user').value;
+            const priority = document.getElementById('add-ticket-priority').value;
+            const status = document.getElementById('add-ticket-status').value;
+            
+            tickets = getDB('ait_tickets', initialTickets);
+            
+            const ids = tickets.map(t => parseInt(t.id.replace('#TKT-', '')));
+            const nextIdNum = Math.max(...ids) + 1;
+            const newId = `#TKT-${nextIdNum}`;
+            const today = new Date().toISOString().split('T')[0];
+
+            const newTicket = { id: newId, subject, user, date: today, priority, status };
+            tickets.unshift(newTicket);
+            localStorage.setItem('ait_tickets', JSON.stringify(tickets));
+
+            closeAddTicketModal();
+            currentPage = 1;
+            applyDataFilters();
+            showToast(`Ticket ${newId} created successfully!`, 'success');
+        }
+
+        // 2. READ DETAILS
+        function readTicket(id) {
+            tickets = getDB('ait_tickets', initialTickets);
+            const t = tickets.find(ticket => ticket.id === id);
+            if (!t) return;
+
+            document.getElementById('view-ticket-id').innerText = t.id;
+            document.getElementById('view-ticket-subject').innerText = t.subject;
+            document.getElementById('view-ticket-user').innerText = t.user;
+            document.getElementById('view-ticket-date').innerText = t.date;
+
+            const pBadge = document.getElementById('view-ticket-priority');
+            pBadge.innerText = t.priority;
+            let pClass = '';
+            if (t.priority === 'High') pClass = 'bg-rose-50 text-rose-600 dark:bg-rose-950/30 dark:text-rose-400 border-rose-100 dark:border-rose-900/50';
+            else if (t.priority === 'Medium') pClass = 'bg-amber-50 text-amber-600 dark:bg-amber-950/30 dark:text-amber-400 border-amber-100 dark:border-amber-900/50';
+            else pClass = 'bg-blue-50 text-blue-600 dark:bg-blue-950/30 dark:text-blue-400 border-blue-100 dark:border-blue-900/50';
+            pBadge.className = `px-2 py-0.5 text-[10px] font-bold border rounded-md ${pClass}`;
+
+            const sBadge = document.getElementById('view-ticket-status');
+            sBadge.innerText = t.status;
+            let sClass = '';
+            if (t.status === 'Open') sClass = 'border-emerald-500/30 dark:border-emerald-500/20 text-emerald-600 dark:text-emerald-400';
+            else if (t.status === 'In Progress') sClass = 'border-amber-500/30 dark:border-amber-500/20 text-amber-600 dark:text-amber-400';
+            else sClass = 'bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-400 border-transparent';
+            sBadge.className = `px-2.5 py-1 text-[10px] font-bold border rounded-full ${sClass}`;
+
+            const modal = document.getElementById('view-ticket-modal');
+            const card = document.getElementById('view-ticket-modal-card');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                card.classList.remove('scale-95', 'opacity-0');
+                card.classList.add('scale-100', 'opacity-100');
+            }, 50);
+            if (window.lucide) lucide.createIcons();
+        }
+
+        function closeViewTicketModal() {
+            const modal = document.getElementById('view-ticket-modal');
+            const card = document.getElementById('view-ticket-modal-card');
+            card.classList.remove('scale-100', 'opacity-100');
+            card.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => { modal.classList.add('hidden'); }, 300);
+        }
+
+        // 3. EDIT / UPDATE
+        function openEditTicketModal(id) {
+            tickets = getDB('ait_tickets', initialTickets);
+            const t = tickets.find(ticket => ticket.id === id);
+            if (!t) return;
+
+            document.getElementById('edit-ticket-id').value = t.id;
+            document.getElementById('edit-ticket-subject').value = t.subject;
+            document.getElementById('edit-ticket-user').value = t.user;
+            document.getElementById('edit-ticket-priority').value = t.priority;
+            document.getElementById('edit-ticket-status').value = t.status;
+
+            const modal = document.getElementById('edit-ticket-modal');
+            const card = document.getElementById('edit-ticket-modal-card');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                card.classList.remove('scale-95', 'opacity-0');
+                card.classList.add('scale-100', 'opacity-100');
+            }, 50);
+            if (window.lucide) lucide.createIcons();
+        }
+
+        function closeEditTicketModal() {
+            const modal = document.getElementById('edit-ticket-modal');
+            const card = document.getElementById('edit-ticket-modal-card');
+            card.classList.remove('scale-100', 'opacity-100');
+            card.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => { modal.classList.add('hidden'); }, 300);
+        }
+
+        // Save Edit Ticket
+        function submitEditTicket(e) {
+            e.preventDefault();
+            const id = document.getElementById('edit-ticket-id').value;
+            const subject = document.getElementById('edit-ticket-subject').value;
+            const user = document.getElementById('edit-ticket-user').value;
+            const priority = document.getElementById('edit-ticket-priority').value;
+            const status = document.getElementById('edit-ticket-status').value;
+
+            tickets = getDB('ait_tickets', initialTickets);
+            const index = tickets.findIndex(t => t.id === id);
+            if (index !== -1) {
+                tickets[index].subject = subject;
+                tickets[index].user = user;
+                tickets[index].priority = priority;
+                tickets[index].status = status;
+                
+                localStorage.setItem('ait_tickets', JSON.stringify(tickets));
+                closeEditTicketModal();
+                applyDataFilters();
+                showToast(`Ticket ${id} has been updated.`, 'success');
+            }
+        }
+
+        // 4. DELETE TICKET
+        function deleteTicket(id) {
+            if (confirm(`Are you sure you want to delete ticket ${id}?`)) {
+                tickets = getDB('ait_tickets', initialTickets);
+                tickets = tickets.filter(t => t.id !== id);
+                localStorage.setItem('ait_tickets', JSON.stringify(tickets));
+                
+                applyDataFilters();
+                showToast(`Ticket ${id} deleted successfully.`, 'danger');
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const isMinimized = localStorage.getItem('sidebar-minimized') === 'true';
+            if (isMinimized) {
+                document.body.classList.add('sidebar-minimized');
+            }
+
+            const cb = window.location.protocol.startsWith('http') ? '?v=' + new Date().getTime() : '';
+            Promise.all([
+                fetch('component/sidebar.html' + cb).then(res => res.text()),
+                fetch('component/navbar.html' + cb).then(res => res.text()),
+                fetch('component/footer.html' + cb).then(res => res.text())
+            ])
+            .then(([sidebarData, navbarData, footerData]) => {
+                document.getElementById('sidebar-placeholder').innerHTML = sidebarData;
+                document.getElementById('navbar-placeholder').innerHTML = navbarData;
+                document.getElementById('footer-placeholder').innerHTML = footerData;
+
+                if (isMinimized) {
+                    const icon = document.getElementById('minimize-icon');
+                    if (icon) {
+                        icon.setAttribute('data-lucide', 'chevron-right');
+                    }
+                }
+
+                initAdminControls();
+                initPage('table');
+                initProfileDisplay();
+                
+                // Initialize Table Data
+                applyDataFilters();
+            })
+            .catch(error => {
+                console.error('Error loading admin components:', error);
+                initProfileDisplay();
+                applyDataFilters();
+            });
+        });
+    </script>
+</body>
+</html>

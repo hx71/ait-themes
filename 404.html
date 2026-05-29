@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 Page Not Found - AIT Themes</title>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#2563eb', // Blue-600
+                        secondary: '#4f46e5', // Indigo-600
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Custom CSS for Animations -->
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-900 dark:text-slate-50 font-sans antialiased overflow-x-hidden transition-colors duration-300 flex flex-col min-h-screen">
+
+    <!-- Decorative Background Elements -->
+    <div class="fixed inset-0 z-[-1] overflow-hidden pointer-events-none">
+        <div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-blue-400/20 dark:bg-blue-600/10 blur-[100px]"></div>
+        <div class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-indigo-400/20 dark:bg-indigo-600/10 blur-[100px]"></div>
+    </div>
+
+    <!-- Placeholder for Navbar -->
+    <div id="navbar-placeholder"></div>
+
+    <!-- 404 Content Section -->
+    <main class="flex-grow flex items-center justify-center pt-32 pb-20 px-4 sm:px-6 lg:px-8 relative">
+        <div class="text-center max-w-2xl mx-auto reveal">
+            <p class="text-base font-semibold text-blue-600 dark:text-blue-400 tracking-wide uppercase">Error 404</p>
+            <h1 class="mt-4 text-5xl sm:text-7xl font-bold tracking-tight text-slate-900 dark:text-white">
+                Page not <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-500">found</span>
+            </h1>
+            <p class="mt-6 text-lg text-slate-600 dark:text-slate-400 leading-relaxed">
+                Sorry, we couldn't find the page you were looking for. The page might have been removed, renamed, or never existed.
+            </p>
+            <div class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
+                <a href="index.html" class="w-full sm:w-auto px-6 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-medium hover:shadow-lg hover:shadow-blue-500/30 hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-center gap-2">
+                    <i data-lucide="arrow-left" class="w-4 h-4"></i> Back to Homepage
+                </a>
+                <a href="contact.html" class="w-full sm:w-auto px-6 py-3 rounded-xl bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 font-medium border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors duration-300 text-center">
+                    Contact Support
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Placeholder for Footer -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Scripts -->
+    <script>
+        const cb = window.location.protocol.startsWith('http') ? '?v=' + new Date().getTime() : '';
+        Promise.all([
+            fetch('components/navbar.html' + cb).then(res => res.text()),
+            fetch('components/footer.html' + cb).then(res => res.text())
+        ])
+        .then(([navbarData, footerData]) => {
+            document.getElementById('navbar-placeholder').innerHTML = navbarData;
+            document.getElementById('footer-placeholder').innerHTML = footerData;
+            const script = document.createElement('script');
+            script.src = 'assets/js/main.js';
+            document.body.appendChild(script);
+        })
+        .catch(error => console.error('Error loading components:', error));
+    </script>
+</body>
+</html>

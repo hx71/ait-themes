@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Services - AIT Themes</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'], },
+                    colors: { primary: '#2563eb', secondary: '#4f46e5', }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-900 dark:text-slate-50 font-sans antialiased overflow-x-hidden transition-colors duration-300">
+
+    <div class="fixed inset-0 z-[-1] overflow-hidden pointer-events-none">
+        <div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-blue-400/20 dark:bg-blue-600/10 blur-[100px]"></div>
+        <div class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-indigo-400/20 dark:bg-indigo-600/10 blur-[100px]"></div>
+    </div>
+
+    <div id="navbar-placeholder"></div>
+
+    <!-- Services Section -->
+    <section class="pt-32 pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative min-h-[70vh]">
+        <div class="text-center max-w-2xl mx-auto mb-16 reveal">
+            <h1 class="text-4xl sm:text-5xl font-bold text-slate-900 dark:text-white mb-4">Our Services</h1>
+            <p class="text-slate-600 dark:text-slate-400 text-lg">Comprehensive solutions to grow your digital business from concept to launch.</p>
+        </div>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="group bg-white dark:bg-slate-800 rounded-2xl p-8 border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all reveal delay-100">
+                <div class="w-12 h-12 rounded-xl bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400 mb-6 group-hover:scale-110 transition-transform">
+                    <i data-lucide="layout" class="w-6 h-6"></i>
+                </div>
+                <h4 class="text-xl font-semibold text-slate-900 dark:text-white mb-3">UI/UX Design</h4>
+                <p class="text-slate-600 dark:text-slate-400 text-sm">Designing intuitive and engaging user interfaces to ensure an unforgettable digital experience.</p>
+            </div>
+            
+            <div class="group bg-white dark:bg-slate-800 rounded-2xl p-8 border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all reveal delay-200">
+                <div class="w-12 h-12 rounded-xl bg-indigo-50 dark:bg-indigo-900/30 flex items-center justify-center text-indigo-600 dark:text-indigo-400 mb-6 group-hover:scale-110 transition-transform">
+                    <i data-lucide="code" class="w-6 h-6"></i>
+                </div>
+                <h4 class="text-xl font-semibold text-slate-900 dark:text-white mb-3">Web Development</h4>
+                <p class="text-slate-600 dark:text-slate-400 text-sm">Building responsive, high-performance websites using modern web technologies.</p>
+            </div>
+            
+            <div class="group bg-white dark:bg-slate-800 rounded-2xl p-8 border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all reveal delay-300">
+                <div class="w-12 h-12 rounded-xl bg-emerald-50 dark:bg-emerald-950/20 flex items-center justify-center text-emerald-600 dark:text-emerald-400 mb-6 group-hover:scale-110 transition-transform">
+                    <i data-lucide="bar-chart-2" class="w-6 h-6"></i>
+                </div>
+                <h4 class="text-xl font-semibold text-slate-900 dark:text-white mb-3">SEO Optimization</h4>
+                <p class="text-slate-600 dark:text-slate-400 text-sm">Improving your website's visibility on search engines to reach a larger organic audience.</p>
+            </div>
+        </div>
+    </section>
+
+    <div id="footer-placeholder"></div>
+
+    <script>
+        const cb = window.location.protocol.startsWith('http') ? '?v=' + new Date().getTime() : '';
+        Promise.all([
+            fetch('components/navbar.html' + cb).then(res => res.text()),
+            fetch('components/footer.html' + cb).then(res => res.text())
+        ])
+        .then(([navbarData, footerData]) => {
+            document.getElementById('navbar-placeholder').innerHTML = navbarData;
+            document.getElementById('footer-placeholder').innerHTML = footerData;
+            
+            // Activate navbar menu link for services
+            const navLinks = document.querySelectorAll('#navbar a');
+            navLinks.forEach(link => {
+                if(link.getAttribute('href') === 'services.html') {
+                    link.classList.add('text-blue-600', 'dark:text-blue-400');
+                }
+            });
+
+            const script = document.createElement('script');
+            script.src = 'assets/js/main.js';
+            document.body.appendChild(script);
+        })
+        .catch(error => console.error('Error loading components:', error));
+    </script>
+</body>
+</html>

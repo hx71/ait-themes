@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Icons Preview - AIT Themes</title>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#2563eb', // Blue-600
+                        secondary: '#4f46e5', // Indigo-600
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Custom CSS for Scrollbars & Animations -->
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <style>
+        .fade-in {
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .sidebar-item-active {
+            background-color: #eff6ff;
+            color: #2563eb;
+            font-weight: 600;
+            border-left: 4px solid #2563eb;
+        }
+        .dark .sidebar-item-active {
+            background-color: rgba(37, 99, 235, 0.15);
+            color: #60a5fa;
+            border-left: 4px solid #3b82f6;
+        }
+
+        /* Sidebar Minimized state */
+        @media (min-width: 1024px) {
+            body.sidebar-minimized #desktop-sidebar {
+                width: 5rem; /* w-20 */
+            }
+            body.sidebar-minimized #main-content-wrapper {
+                padding-left: 5rem; /* lg:pl-20 */
+            }
+            body.sidebar-minimized #desktop-sidebar #desktop-logo-text,
+            body.sidebar-minimized #desktop-sidebar nav span,
+            body.sidebar-minimized #desktop-sidebar .tab-btn-text,
+            body.sidebar-minimized #desktop-sidebar #desktop-user-info,
+            body.sidebar-minimized #desktop-sidebar #desktop-logout-text {
+                display: none;
+            }
+            body.sidebar-minimized #desktop-sidebar .tab-btn {
+                justify-content: center;
+                padding-left: 0;
+                padding-right: 0;
+                gap: 0;
+            }
+            body.sidebar-minimized #desktop-sidebar #desktop-user-card {
+                justify-content: center;
+                padding: 0.5rem;
+            }
+            body.sidebar-minimized #desktop-sidebar #desktop-logout-btn {
+                justify-content: center;
+                padding: 0.5rem;
+                width: 2.75rem;
+                height: 2.75rem;
+                border-radius: 9999px;
+            }
+            body.sidebar-minimized #desktop-sidebar .h-16 {
+                justify-content: center;
+                padding-left: 0;
+                padding-right: 0;
+            }
+            body.sidebar-minimized #desktop-sidebar #minimize-sidebar-btn {
+                position: absolute;
+                right: -0.75rem;
+                top: 1.25rem;
+                background-color: white;
+                border: 1px solid rgb(226, 232, 240);
+                box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+                z-index: 50;
+                border-radius: 9999px;
+            }
+            body.sidebar-minimized.dark #desktop-sidebar #minimize-sidebar-btn {
+                background-color: rgb(30, 41, 59);
+                border-color: rgb(51, 65, 85);
+                box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.5);
+            }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-900 dark:text-slate-50 font-sans antialiased transition-colors duration-300">
+
+    <!-- Sidebar Placeholder -->
+    <div id="sidebar-placeholder"></div>
+
+    <!-- Main Content Wrapper -->
+    <div id="main-content-wrapper" class="lg:pl-64 flex flex-col min-h-screen bg-slate-50 dark:bg-slate-900 transition-all duration-300">
+        
+        <!-- Top Navbar Header Placeholder -->
+        <div id="navbar-placeholder"></div>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto space-y-6">
+
+            <!-- ================= UTILITY HEADER ================= -->
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                    <h3 class="text-2xl font-bold text-slate-800 dark:text-white flex items-center gap-2">
+                        <i data-lucide="shapes" class="w-6 h-6 text-blue-600"></i> Icons Preview
+                    </h3>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Lucide Icons preview block featuring dynamic stroke adjustment, color customization, search filters, and code exports.</p>
+                </div>
+            </div>
+
+            <!-- ================= CONTROL & CUSTOMIZE PANEL ================= -->
+            <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200/50 dark:border-slate-700/50 shadow-sm space-y-6">
+                
+                <!-- Live Customizer Parameters -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Parameter 1: Stroke Width Slider -->
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <label class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Icon Stroke Width</label>
+                            <span id="stroke-value" class="text-xs font-mono font-bold text-blue-600 dark:text-blue-400">2.0px</span>
+                        </div>
+                        <input id="stroke-slider" type="range" min="1" max="3" step="0.5" value="2" oninput="changeStrokeWidth(this.value)" class="w-full h-1.5 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-600">
+                    </div>
+
+                    <!-- Parameter 2: Color Predefined Toggles -->
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Icon Theme Color</label>
+                        <div class="flex items-center gap-2.5">
+                            <button onclick="changeIconColor('text-blue-600 dark:text-blue-400')" class="w-7 h-7 rounded-full bg-blue-600 border-2 border-white dark:border-slate-800 hover:scale-110 active:scale-95 transition-all shadow-md"></button>
+                            <button onclick="changeIconColor('text-indigo-600 dark:text-indigo-400')" class="w-7 h-7 rounded-full bg-indigo-600 border-2 border-white dark:border-slate-800 hover:scale-110 active:scale-95 transition-all shadow-md"></button>
+                            <button onclick="changeIconColor('text-emerald-600 dark:text-emerald-400')" class="w-7 h-7 rounded-full bg-emerald-600 border-2 border-white dark:border-slate-800 hover:scale-110 active:scale-95 transition-all shadow-md"></button>
+                            <button onclick="changeIconColor('text-violet-600 dark:text-violet-400')" class="w-7 h-7 rounded-full bg-violet-600 border-2 border-white dark:border-slate-800 hover:scale-110 active:scale-95 transition-all shadow-md"></button>
+                            <button onclick="changeIconColor('text-rose-600 dark:text-rose-400')" class="w-7 h-7 rounded-full bg-rose-600 border-2 border-white dark:border-slate-800 hover:scale-110 active:scale-95 transition-all shadow-md"></button>
+                            <button onclick="changeIconColor('text-slate-700 dark:text-slate-200')" class="w-7 h-7 rounded-full bg-slate-700 dark:bg-slate-200 border-2 border-white dark:border-slate-800 hover:scale-110 active:scale-95 transition-all shadow-md" title="Default Theme"></button>
+                        </div>
+                    </div>
+
+                    <!-- Parameter 3: Search Bar -->
+                    <div class="relative">
+                        <label class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Search Icons</label>
+                        <div class="relative w-full">
+                            <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                                <i data-lucide="search" class="w-4 h-4"></i>
+                            </span>
+                            <input id="icon-search" type="text" oninput="handleSearch(this.value)" placeholder="Search icons by name..." class="block w-full pl-9 pr-4 py-2 text-xs rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Category Filters Row -->
+                <div class="border-t border-slate-100 dark:border-slate-700/50 pt-5">
+                    <div class="flex flex-wrap items-center gap-2" id="category-tabs-container">
+                        <!-- Loaded dynamically via JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- ================= ICONS DISPLAY GRID ================= -->
+            <div id="icons-display-grid" class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-4">
+                <!-- Loaded dynamically via JS -->
+            </div>
+
+            <!-- Empty State -->
+            <div id="no-icons-found" class="hidden py-16 text-center text-slate-400 dark:text-slate-500">
+                <i data-lucide="package-open" class="w-12 h-12 mx-auto mb-3"></i>
+                <h5 class="font-bold text-sm text-slate-700 dark:text-slate-350">No Icons Found</h5>
+                <p class="text-xs text-slate-400 mt-1">Try resetting the filters or using another keyword.</p>
+            </div>
+
+            <!-- Footer Placeholder -->
+            <div id="footer-placeholder"></div>
+        </main>
+    </div>
+
+    <!-- ================= ICON DETAIL PREVIEW & CODE MODAL ================= -->
+    <div id="icon-detail-modal" class="fixed inset-0 z-50 overflow-y-auto hidden">
+        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 transition-opacity bg-slate-900/50 backdrop-blur-sm" onclick="closeDetailModal()"></div>
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen">&#8203;</span>
+            
+            <div id="icon-detail-modal-card" class="inline-block align-bottom bg-white dark:bg-slate-800 rounded-3xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full border border-slate-200/50 dark:border-slate-700/50 scale-95 opacity-0 duration-300">
+                <div class="p-6 space-y-6">
+                    <div class="flex justify-between items-center pb-3 border-b border-slate-100 dark:border-slate-700">
+                        <h4 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                            <i data-lucide="info" class="w-5 h-5 text-blue-500"></i> Icon Code & Asset
+                        </h4>
+                        <button onclick="closeDetailModal()" class="p-1 rounded-lg text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700">
+                            <i data-lucide="x" class="w-5 h-5"></i>
+                        </button>
+                    </div>
+
+                    <!-- Modal Body split preview -->
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                        <!-- Big Icon View -->
+                        <div class="bg-slate-50 dark:bg-slate-900 rounded-2xl p-6 flex flex-col items-center justify-center border border-slate-200/40 dark:border-slate-700/30">
+                            <div id="modal-big-icon-container" class="w-20 h-20 flex items-center justify-center">
+                                <!-- Appended dynamically -->
+                            </div>
+                            <span id="modal-icon-name" class="mt-4 font-mono text-xs font-bold text-slate-700 dark:text-slate-350 truncate max-w-full"></span>
+                        </div>
+
+                        <!-- Code Boxes -->
+                        <div class="sm:col-span-2 space-y-4 flex flex-col justify-between">
+                            <!-- 1. HTML Tag -->
+                            <div class="space-y-1.5">
+                                <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">HTML Embed Code</label>
+                                <div class="flex items-center gap-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 p-2.5 rounded-xl">
+                                    <code id="code-html-tag" class="font-mono text-xs text-slate-800 dark:text-slate-300 flex-1 overflow-x-auto whitespace-nowrap"></code>
+                                    <button onclick="copyToClipboard('code-html-tag', 'btn-copy-html')" id="btn-copy-html" class="p-1.5 rounded-lg border border-slate-200 dark:border-slate-750 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-500 dark:text-slate-400 transition-all shrink-0">
+                                        <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- 2. React Tag -->
+                            <div class="space-y-1.5">
+                                <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">React Component</label>
+                                <div class="flex items-center gap-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 p-2.5 rounded-xl">
+                                    <code id="code-react-tag" class="font-mono text-xs text-slate-800 dark:text-slate-300 flex-1 overflow-x-auto whitespace-nowrap"></code>
+                                    <button onclick="copyToClipboard('code-react-tag', 'btn-copy-react')" id="btn-copy-react" class="p-1.5 rounded-lg border border-slate-200 dark:border-slate-750 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-500 dark:text-slate-400 transition-all shrink-0">
+                                        <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pt-4 border-t border-slate-100 dark:border-slate-700 flex justify-end">
+                        <button onclick="closeDetailModal()" class="px-5 py-2.5 bg-slate-850 hover:bg-slate-750 dark:bg-slate-700 dark:hover:bg-slate-650 text-white rounded-xl text-xs font-semibold transition-all">
+                            Close Preview
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= SYSTEM TOAST NOTIFICATION ================= -->
+    <div id="toast-container" class="fixed bottom-5 right-5 z-[60] flex flex-col gap-3 pointer-events-none"></div>
+
+    <script>
+        function closeSidebar() {
+            const mobileSidebar = document.getElementById('mobile-sidebar');
+            const backdrop = document.getElementById('mobile-sidebar-backdrop');
+            if (mobileSidebar && backdrop) {
+                mobileSidebar.classList.add('-translate-x-full');
+                backdrop.classList.remove('opacity-100');
+                setTimeout(() => { backdrop.classList.add('hidden'); }, 300);
+            }
+        }
+
+        function toggleSidebarMinimize() {
+            const body = document.body;
+            body.classList.toggle('sidebar-minimized');
+            
+            const isMinimized = body.classList.contains('sidebar-minimized');
+            localStorage.setItem('sidebar-minimized', isMinimized ? 'true' : 'false');
+            
+            const icon = document.getElementById('minimize-icon');
+            if (icon) {
+                icon.setAttribute('data-lucide', isMinimized ? 'chevron-right' : 'chevron-left');
+                if (window.lucide) {
+                    window.lucide.createIcons();
+                }
+            }
+        }
+
+        function initAdminControls() {
+            lucide.createIcons();
+            const openMobileBtn = document.getElementById('open-mobile-sidebar-btn');
+            const closeMobileBtn = document.getElementById('close-mobile-sidebar-btn');
+            const mobileSidebar = document.getElementById('mobile-sidebar');
+            const backdrop = document.getElementById('mobile-sidebar-backdrop');
+
+            if (openMobileBtn) openMobileBtn.addEventListener('click', () => {
+                mobileSidebar.classList.remove('-translate-x-full');
+                backdrop.classList.remove('hidden');
+                setTimeout(() => { backdrop.classList.add('opacity-100'); }, 10);
+            });
+            if (closeMobileBtn) closeMobileBtn.addEventListener('click', closeSidebar);
+            if (backdrop) backdrop.addEventListener('click', closeSidebar);
+
+            // Dark Mode Logic
+            const htmlElement = document.documentElement;
+            const themeBtn = document.getElementById('theme-toggle');
+            
+            if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                htmlElement.classList.add('dark');
+                updateThemeIcons('dark');
+            } else {
+                htmlElement.classList.remove('dark');
+                updateThemeIcons('light');
+            }
+
+            function updateThemeIcons(theme) {
+                const iconDark = document.getElementById('theme-icon-dark');
+                const iconLight = document.getElementById('theme-icon-light');
+                if (theme === 'dark') {
+                    if (iconDark) iconDark.classList.remove('hidden');
+                    if (iconLight) iconLight.classList.add('hidden');
+                } else {
+                    if (iconDark) iconDark.classList.add('hidden');
+                    if (iconLight) iconLight.classList.remove('hidden');
+                }
+            }
+
+            if (themeBtn) {
+                themeBtn.addEventListener('click', () => {
+                    let activeTheme = 'light';
+                    if (htmlElement.classList.contains('dark')) {
+                        htmlElement.classList.remove('dark');
+                        localStorage.setItem('color-theme', 'light');
+                    } else {
+                        htmlElement.classList.add('dark');
+                        localStorage.setItem('color-theme', 'dark');
+                        activeTheme = 'dark';
+                    }
+                    updateThemeIcons(activeTheme);
+                });
+            }
+        }
+
+        function initPage(tabId) {
+            const titleMap = {
+                'overview': 'Analytics Overview',
+                'themes': 'Digital Themes Management',
+                'users': 'User Management',
+                'transactions': 'Transaction History Log',
+                'settings': 'Dashboard Settings',
+                'form': 'Form Elements Preview',
+                'form-wizard': 'Form Wizard Stepper',
+                'form-editor': 'Form Editor Preview',
+                'select': 'Select Elements Preview',
+                'datepicker': 'Date & Time Pickers',
+                'modal': 'Interactive Modals Preview',
+                'alert': 'Alert Panels & Badges',
+                'table': 'Paginated Data Table',
+                'icons': 'Icons View'
+            };
+            
+            const pageTitle = document.getElementById('page-title');
+            if (pageTitle) {
+                pageTitle.innerText = titleMap[tabId] || 'Dashboard';
+            }
+
+            const btns = document.querySelectorAll('.tab-btn');
+            btns.forEach(btn => {
+                if (btn.getAttribute('data-tab') === tabId) {
+                    btn.classList.add('sidebar-item-active');
+                } else {
+                    btn.classList.remove('sidebar-item-active');
+                }
+            });
+        }
+
+        // DATABASE SIMULATION
+        const initialUsers = [
+            { name: 'Hasrul', email: 'hasrul@aitthemes.com', role: 'Admin', status: 'Active', date: '2026-01-10', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=64&q=80' }
+        ];
+
+        function getDB(key, defaults) {
+            if (!localStorage.getItem(key)) {
+                localStorage.setItem(key, JSON.stringify(defaults));
+            }
+            return JSON.parse(localStorage.getItem(key));
+        }
+
+        let users = getDB('ait_users', initialUsers);
+
+        function initProfileDisplay() {
+            const adminUser = users.find(u => u.role === 'Admin') || users[0];
+            const userName = adminUser.name;
+            const userAvatar = adminUser.avatar;
+
+            document.getElementById('mobile-user-name').innerText = userName;
+            document.getElementById('desktop-user-name').innerText = userName;
+            document.getElementById('header-user-name').innerText = userName;
+            
+            document.getElementById('mobile-user-avatar').src = userAvatar;
+            document.getElementById('desktop-user-avatar').src = userAvatar;
+            document.getElementById('header-user-avatar').src = userAvatar;
+        }
+
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `p-4 rounded-2xl shadow-xl flex items-center gap-3 bg-white dark:bg-slate-800 border border-slate-200/50 dark:border-slate-700/50 text-slate-800 dark:text-white text-sm pointer-events-auto fade-in transition-all duration-300`;
+            
+            let iconMarkup = '';
+            if (type === 'success') {
+                iconMarkup = `<div class="w-8 h-8 rounded-xl bg-emerald-100 dark:bg-emerald-950 flex items-center justify-center text-emerald-600 dark:text-emerald-400 shrink-0"><i data-lucide="check-circle" class="w-5 h-5"></i></div>`;
+            } else if (type === 'warning') {
+                iconMarkup = `<div class="w-8 h-8 rounded-xl bg-amber-100 dark:bg-amber-950 flex items-center justify-center text-amber-600 dark:text-amber-400 shrink-0"><i data-lucide="alert-triangle" class="w-5 h-5"></i></div>`;
+            } else {
+                iconMarkup = `<div class="w-8 h-8 rounded-xl bg-rose-100 dark:bg-rose-950 flex items-center justify-center text-rose-600 dark:text-rose-400 shrink-0"><i data-lucide="alert-circle" class="w-5 h-5"></i></div>`;
+            }
+
+            toast.innerHTML = `
+                ${iconMarkup}
+                <div class="flex-1 font-medium">${message}</div>
+                <button class="text-slate-400 hover:text-slate-600 dark:hover:text-white" onclick="this.parentElement.remove()">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            `;
+
+            container.appendChild(toast);
+            lucide.createIcons();
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-2');
+                setTimeout(() => { toast.remove(); }, 300);
+            }, 4000);
+        }
+
+        // =============================================================
+        // ICONS PREVIEW DATABASE & FILTER LOGIC
+        // =============================================================
+        const iconsDatabase = [
+            // Category: Web & Navigation
+            { name: 'layout-dashboard', category: 'Web & Navigation' },
+            { name: 'menu', category: 'Web & Navigation' },
+            { name: 'x', category: 'Web & Navigation' },
+            { name: 'search', category: 'Web & Navigation' },
+            { name: 'home', category: 'Web & Navigation' },
+            { name: 'user', category: 'Web & Navigation' },
+            { name: 'settings', category: 'Web & Navigation' },
+            { name: 'bell', category: 'Web & Navigation' },
+            { name: 'help-circle', category: 'Web & Navigation' },
+            { name: 'log-out', category: 'Web & Navigation' },
+
+            // Category: Actions & Editing
+            { name: 'plus', category: 'Actions & Editing' },
+            { name: 'edit', category: 'Actions & Editing' },
+            { name: 'trash-2', category: 'Actions & Editing' },
+            { name: 'check', category: 'Actions & Editing' },
+            { name: 'eye', category: 'Actions & Editing' },
+            { name: 'copy', category: 'Actions & Editing' },
+            { name: 'save', category: 'Actions & Editing' },
+            { name: 'lock', category: 'Actions & Editing' },
+            { name: 'unlock', category: 'Actions & Editing' },
+            { name: 'refresh-cw', category: 'Actions & Editing' },
+
+            // Category: Media & Audio
+            { name: 'play', category: 'Media & Audio' },
+            { name: 'pause', category: 'Media & Audio' },
+            { name: 'volume-2', category: 'Media & Audio' },
+            { name: 'video', category: 'Media & Audio' },
+            { name: 'music', category: 'Media & Audio' },
+            { name: 'mic', category: 'Media & Audio' },
+            { name: 'tv', category: 'Media & Audio' },
+            { name: 'headphones', category: 'Media & Audio' },
+            { name: 'image', category: 'Media & Audio' },
+            { name: 'camera', category: 'Media & Audio' },
+
+            // Category: File & Document
+            { name: 'file', category: 'File & Document' },
+            { name: 'file-text', category: 'File & Document' },
+            { name: 'folder', category: 'File & Document' },
+            { name: 'folder-open', category: 'File & Document' },
+            { name: 'book', category: 'File & Document' },
+            { name: 'paperclip', category: 'File & Document' },
+            { name: 'download', category: 'File & Document' },
+            { name: 'upload', category: 'File & Document' },
+            { name: 'mail', category: 'File & Document' },
+            { name: 'inbox', category: 'File & Document' },
+
+            // Category: E-Commerce & Finances
+            { name: 'credit-card', category: 'E-Commerce & Finances' },
+            { name: 'shopping-cart', category: 'E-Commerce & Finances' },
+            { name: 'dollar-sign', category: 'E-Commerce & Finances' },
+            { name: 'wallet', category: 'E-Commerce & Finances' },
+            { name: 'banknote', category: 'E-Commerce & Finances' },
+            { name: 'percent', category: 'E-Commerce & Finances' },
+            { name: 'tag', category: 'E-Commerce & Finances' },
+            { name: 'package', category: 'E-Commerce & Finances' },
+            { name: 'gift', category: 'E-Commerce & Finances' },
+            { name: 'bar-chart', category: 'E-Commerce & Finances' },
+
+            // Category: Arrows & Directions
+            { name: 'arrow-up', category: 'Arrows & Directions' },
+            { name: 'arrow-down', category: 'Arrows & Directions' },
+            { name: 'arrow-left', category: 'Arrows & Directions' },
+            { name: 'arrow-right', category: 'Arrows & Directions' },
+            { name: 'chevron-up', category: 'Arrows & Directions' },
+            { name: 'chevron-down', category: 'Arrows & Directions' },
+            { name: 'chevron-left', category: 'Arrows & Directions' },
+            { name: 'chevron-right', category: 'Arrows & Directions' },
+            { name: 'external-link', category: 'Arrows & Directions' },
+            { name: 'move', category: 'Arrows & Directions' },
+
+            // Category: Social & Communication
+            { name: 'message-square', category: 'Social & Communication' },
+            { name: 'phone', category: 'Social & Communication' },
+            { name: 'share-2', category: 'Social & Communication' },
+            { name: 'thumbs-up', category: 'Social & Communication' },
+            { name: 'thumbs-down', category: 'Social & Communication' },
+            { name: 'heart', category: 'Social & Communication' },
+            { name: 'users', category: 'Social & Communication' },
+            { name: 'send', category: 'Social & Communication' },
+            { name: 'globe', category: 'Social & Communication' },
+            { name: 'hash', category: 'Social & Communication' }
+        ];
+
+        let activeCategory = 'All';
+        let searchQuery = '';
+        let currentStrokeWidth = 2.0;
+        let activeColorClass = 'text-slate-700 dark:text-slate-200';
+
+        function initCategories() {
+            const container = document.getElementById('category-tabs-container');
+            const categories = ['All', 'Web & Navigation', 'Actions & Editing', 'Media & Audio', 'File & Document', 'E-Commerce & Finances', 'Arrows & Directions', 'Social & Communication'];
+            
+            container.innerHTML = '';
+            categories.forEach(cat => {
+                const btn = document.createElement('button');
+                btn.onclick = () => filterCategory(cat);
+                btn.id = `cat-${cat.replace(/\s+/g, '-').toLowerCase()}`;
+                btn.innerText = cat;
+                
+                if (cat === activeCategory) {
+                    btn.className = "px-4 py-2 bg-blue-600 text-white rounded-xl text-xs font-semibold shadow-sm transition-all";
+                } else {
+                    btn.className = "px-4 py-2 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-750 rounded-xl text-xs font-semibold transition-all";
+                }
+                container.appendChild(btn);
+            });
+        }
+
+        function filterCategory(category) {
+            activeCategory = category;
+            initCategories();
+            renderIcons();
+            showToast(`Switched category: ${category}`, 'success');
+        }
+
+        function handleSearch(val) {
+            searchQuery = val.toLowerCase().trim();
+            renderIcons();
+        }
+
+        function changeStrokeWidth(val) {
+            currentStrokeWidth = parseFloat(val);
+            document.getElementById('stroke-value').innerText = `${currentStrokeWidth.toFixed(1)}px`;
+            
+            // Query all svg icons and update live
+            const svgs = document.querySelectorAll('.dynamic-preview-icon svg');
+            svgs.forEach(svg => {
+                svg.setAttribute('stroke-width', currentStrokeWidth);
+            });
+        }
+
+        function changeIconColor(colorClass) {
+            activeColorClass = colorClass;
+            renderIcons();
+            showToast("Theme color updated", "success");
+        }
+
+        function renderIcons() {
+            const grid = document.getElementById('icons-display-grid');
+            const emptyState = document.getElementById('no-icons-found');
+            grid.innerHTML = '';
+
+            let filtered = iconsDatabase.filter(icon => {
+                const matchesCategory = activeCategory === 'All' || icon.category === activeCategory;
+                const matchesSearch = !searchQuery || icon.name.toLowerCase().includes(searchQuery);
+                return matchesCategory && matchesSearch;
+            });
+
+            if (filtered.length === 0) {
+                grid.classList.add('hidden');
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            grid.classList.remove('hidden');
+            emptyState.classList.add('hidden');
+
+            filtered.forEach(icon => {
+                const box = document.createElement('button');
+                box.onclick = () => openDetailModal(icon.name);
+                box.className = "bg-white dark:bg-slate-800 p-4 border border-slate-200/50 dark:border-slate-700/50 rounded-2xl flex flex-col items-center justify-center hover:border-blue-500 dark:hover:border-blue-600 hover:-translate-y-1 hover:shadow-md transition-all duration-300 group";
+                
+                box.innerHTML = `
+                    <div class="w-10 h-10 flex items-center justify-center dynamic-preview-icon ${activeColorClass} group-hover:scale-110 transition-transform">
+                        <i data-lucide="${icon.name}"></i>
+                    </div>
+                    <span class="mt-3 font-mono text-[10px] font-bold text-slate-500 dark:text-slate-400 truncate max-w-full">
+                        ${icon.name}
+                    </span>
+                `;
+                grid.appendChild(box);
+            });
+
+            // Trigger lucide library update
+            lucide.createIcons();
+
+            // Apply stroke values manually to injected svgs
+            const svgs = document.querySelectorAll('.dynamic-preview-icon svg');
+            svgs.forEach(svg => {
+                svg.setAttribute('stroke-width', currentStrokeWidth);
+            });
+        }
+
+        // =============================================================
+        // DETAIL MODAL LOGIC
+        // =============================================================
+        function openDetailModal(name) {
+            const modal = document.getElementById('icon-detail-modal');
+            const card = document.getElementById('icon-detail-modal-card');
+            
+            document.getElementById('modal-icon-name').innerText = name;
+            
+            // Render Big Icon
+            const iconContainer = document.getElementById('modal-big-icon-container');
+            iconContainer.innerHTML = `<i data-lucide="${name}" class="w-12 h-12 text-blue-600"></i>`;
+            
+            // Render codes
+            document.getElementById('code-html-tag').innerText = `<i data-lucide="${name}"></i>`;
+            
+            // Format React Tag name
+            const reactName = name.split('-').map(part => part.charAt(0).toUpperCase() + part.slice(1)).join('');
+            document.getElementById('code-react-tag').innerText = `<${reactName} size={24} />`;
+
+            // Reset copy button states
+            resetCopyButton('btn-copy-html');
+            resetCopyButton('btn-copy-react');
+
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                card.classList.remove('scale-95', 'opacity-0');
+                card.classList.add('scale-100', 'opacity-100');
+            }, 50);
+            lucide.createIcons();
+        }
+
+        function closeDetailModal() {
+            const modal = document.getElementById('icon-detail-modal');
+            const card = document.getElementById('icon-detail-modal-card');
+            card.classList.remove('scale-100', 'opacity-100');
+            card.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => { modal.classList.add('hidden'); }, 300);
+        }
+
+        function copyToClipboard(codeId, buttonId) {
+            const codeText = document.getElementById(codeId).innerText;
+            navigator.clipboard.writeText(codeText);
+            
+            const btn = document.getElementById(buttonId);
+            btn.innerHTML = `<i data-lucide="check" class="w-3.5 h-3.5 text-emerald-500"></i>`;
+            lucide.createIcons();
+            
+            showToast("Copied to clipboard!", "success");
+        }
+
+        function resetCopyButton(id) {
+            const btn = document.getElementById(id);
+            btn.innerHTML = `<i data-lucide="copy" class="w-3.5 h-3.5"></i>`;
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const isMinimized = localStorage.getItem('sidebar-minimized') === 'true';
+            if (isMinimized) {
+                document.body.classList.add('sidebar-minimized');
+            }
+
+            const cb = window.location.protocol.startsWith('http') ? '?v=' + new Date().getTime() : '';
+            Promise.all([
+                fetch('component/sidebar.html' + cb).then(res => res.text()),
+                fetch('component/navbar.html' + cb).then(res => res.text()),
+                fetch('component/footer.html' + cb).then(res => res.text())
+            ])
+            .then(([sidebarData, navbarData, footerData]) => {
+                document.getElementById('sidebar-placeholder').innerHTML = sidebarData;
+                document.getElementById('navbar-placeholder').innerHTML = navbarData;
+                document.getElementById('footer-placeholder').innerHTML = footerData;
+
+                if (isMinimized) {
+                    const icon = document.getElementById('minimize-icon');
+                    if (icon) {
+                        icon.setAttribute('data-lucide', 'chevron-right');
+                    }
+                }
+
+                initAdminControls();
+                initPage('icons');
+                initProfileDisplay();
+                
+                // Initialize icon tabs and cards
+                initCategories();
+                renderIcons();
+            })
+            .catch(error => {
+                console.error('Error loading admin components:', error);
+                initProfileDisplay();
+            });
+        });
+    </script>
+</body>
+</html>

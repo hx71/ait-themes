@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Settings - AIT Themes</title>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#2563eb', // Blue-600
+                        secondary: '#4f46e5', // Indigo-600
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Custom CSS for Scrollbars & Animations -->
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <style>
+        .fade-in {
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .sidebar-item-active {
+            background-color: #eff6ff;
+            color: #2563eb;
+            font-weight: 600;
+            border-left: 4px solid #2563eb;
+        }
+        .dark .sidebar-item-active {
+            background-color: rgba(37, 99, 235, 0.15);
+            color: #60a5fa;
+            border-left: 4px solid #3b82f6;
+        }
+
+        /* Sidebar Minimized state */
+        @media (min-width: 1024px) {
+            body.sidebar-minimized #desktop-sidebar {
+                width: 5rem; /* w-20 */
+            }
+            body.sidebar-minimized #main-content-wrapper {
+                padding-left: 5rem; /* lg:pl-20 */
+            }
+            body.sidebar-minimized #desktop-sidebar #desktop-logo-text,
+            body.sidebar-minimized #desktop-sidebar nav span,
+            body.sidebar-minimized #desktop-sidebar .tab-btn-text,
+            body.sidebar-minimized #desktop-sidebar #desktop-user-info,
+            body.sidebar-minimized #desktop-sidebar #desktop-logout-text {
+                display: none;
+            }
+            body.sidebar-minimized #desktop-sidebar .tab-btn {
+                justify-content: center;
+                padding-left: 0;
+                padding-right: 0;
+                gap: 0;
+            }
+            body.sidebar-minimized #desktop-sidebar #desktop-user-card {
+                justify-content: center;
+                padding: 0.5rem;
+            }
+            body.sidebar-minimized #desktop-sidebar #desktop-logout-btn {
+                justify-content: center;
+                padding: 0.5rem;
+                width: 2.75rem;
+                height: 2.75rem;
+                border-radius: 9999px;
+            }
+            body.sidebar-minimized #desktop-sidebar .h-16 {
+                justify-content: center;
+                padding-left: 0;
+                padding-right: 0;
+            }
+            body.sidebar-minimized #desktop-sidebar #minimize-sidebar-btn {
+                position: absolute;
+                right: -0.75rem;
+                top: 1.25rem;
+                background-color: white;
+                border: 1px solid rgb(226, 232, 240);
+                box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+                z-index: 50;
+                border-radius: 9999px;
+            }
+            body.sidebar-minimized.dark #desktop-sidebar #minimize-sidebar-btn {
+                background-color: rgb(30, 41, 59);
+                border-color: rgb(51, 65, 85);
+                box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.5);
+            }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-900 dark:text-slate-50 font-sans antialiased transition-colors duration-300">
+
+    <!-- Sidebar Placeholder -->
+    <div id="sidebar-placeholder"></div>
+
+    <!-- Main Content Wrapper -->
+    <div id="main-content-wrapper" class="lg:pl-64 flex flex-col min-h-screen bg-slate-50 dark:bg-slate-900 transition-all duration-300">
+        
+        <!-- Top Navbar Header Placeholder -->
+        <div id="navbar-placeholder"></div>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto space-y-6">
+
+            <!-- ================= TAB 5: SETTINGS (SYSTEM) ================= -->
+            <section id="tab-settings" class="tab-pane fade-in space-y-6">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    
+                    <!-- Profile Configuration Card -->
+                    <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200/50 dark:border-slate-700/50 shadow-sm space-y-6 lg:col-span-2">
+                        <div>
+                            <h4 class="font-bold text-slate-800 dark:text-white mb-2 flex items-center gap-2">
+                                <i data-lucide="user" class="w-5 h-5 text-blue-600"></i> Profile Settings
+                            </h4>
+                            <p class="text-xs text-slate-500 dark:text-slate-400">Configure personal account details, display name, and avatar image credentials.</p>
+                        </div>
+                        
+                        <form id="profile-form" onsubmit="saveProfileSettings(event)" class="space-y-4">
+                            <div class="flex flex-col sm:flex-row items-center gap-5 pb-4 border-b border-slate-100 dark:border-slate-700/50">
+                                <img id="profile-preview-avatar" src="" alt="Avatar Preview" class="w-16 h-16 rounded-2xl object-cover border border-slate-200 dark:border-slate-700 shadow-sm">
+                                <div class="w-full flex-1 space-y-1">
+                                    <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider">Avatar Image URL</label>
+                                    <input id="profile-avatar-input" type="text" oninput="document.getElementById('profile-preview-avatar').src = this.value" class="block w-full px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none text-sm">
+                                </div>
+                            </div>
+
+                            <div class="grid sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Full Name</label>
+                                    <input id="profile-name-input" type="text" required class="block w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Email Address</label>
+                                    <input id="profile-email-input" type="email" required class="block w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none">
+                                </div>
+                            </div>
+
+                            <div class="grid sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Account Role</label>
+                                    <input id="profile-role-input" type="text" readonly class="block w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-900/50 text-slate-400 cursor-not-allowed outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Join Date</label>
+                                    <input id="profile-date-input" type="text" readonly class="block w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-900/50 text-slate-400 cursor-not-allowed outline-none">
+                                </div>
+                            </div>
+
+                            <div class="pt-4 border-t border-slate-100 dark:border-slate-700/50 flex justify-end">
+                                <button type="submit" class="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-semibold hover:shadow-lg transition-all">
+                                    Save Profile
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- General Settings Card -->
+                    <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200/50 dark:border-slate-700/50 shadow-sm space-y-6">
+                        <div>
+                            <h4 class="font-bold text-slate-800 dark:text-white mb-2 flex items-center gap-2">
+                                <i data-lucide="settings" class="w-5 h-5 text-indigo-600"></i> Website Settings
+                            </h4>
+                            <p class="text-xs text-slate-500 dark:text-slate-400">Manage site-wide variables, API configurations, and maintenance states.</p>
+                        </div>
+                        
+                        <form id="website-form" onsubmit="saveWebsiteSettings(event)" class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Global Site Title</label>
+                                <input id="settings-title-input" type="text" required class="block w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none">
+                            </div>
+
+                            <!-- Maintenance Toggle -->
+                            <div class="p-3 border border-slate-100 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-900/30 rounded-2xl flex justify-between items-center gap-3">
+                                <div class="overflow-hidden">
+                                    <h5 class="text-sm font-semibold text-slate-800 dark:text-white">Maintenance Mode</h5>
+                                    <p class="text-[10px] text-slate-400 dark:text-slate-500 truncate">Blocks guest visits with 503 template.</p>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input id="settings-maintenance-input" type="checkbox" class="sr-only peer">
+                                    <div class="w-11 h-6 bg-slate-200 dark:bg-slate-700 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                                </label>
+                            </div>
+
+                            <!-- API Keys Mock -->
+                            <div class="space-y-1">
+                                <label class="block text-sm font-medium text-slate-700 dark:text-slate-300">Public API Access Token</label>
+                                <div class="flex gap-2">
+                                    <input type="text" readonly value="pk_live_51Nw9xJ24Bf918C8B1902..." class="flex-1 px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-900/50 text-slate-400 text-xs cursor-not-allowed outline-none">
+                                    <button type="button" onclick="copyAPIKey()" class="px-3.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 hover:bg-slate-100 dark:bg-slate-850 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-all flex items-center justify-center shrink-0">
+                                        <i data-lucide="copy" class="w-4 h-4"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="pt-4 border-t border-slate-100 dark:border-slate-700 flex justify-end">
+                                <button type="submit" class="w-full px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-semibold hover:shadow-lg transition-all">
+                                    Save Site Configs
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- Footer Placeholder -->
+            <div id="footer-placeholder"></div>
+        </main>
+    </div>
+
+    <!-- ================= SYSTEM TOAST NOTIFICATION ================= -->
+    <div id="toast-container" class="fixed bottom-5 right-5 z-[60] flex flex-col gap-3 pointer-events-none"></div>
+
+    <script>
+        function closeSidebar() {
+            const mobileSidebar = document.getElementById('mobile-sidebar');
+            const backdrop = document.getElementById('mobile-sidebar-backdrop');
+            if (mobileSidebar && backdrop) {
+                mobileSidebar.classList.add('-translate-x-full');
+                backdrop.classList.remove('opacity-100');
+                setTimeout(() => { backdrop.classList.add('hidden'); }, 300);
+            }
+        }
+
+        function toggleSidebarMinimize() {
+            const body = document.body;
+            body.classList.toggle('sidebar-minimized');
+            
+            const isMinimized = body.classList.contains('sidebar-minimized');
+            localStorage.setItem('sidebar-minimized', isMinimized ? 'true' : 'false');
+            
+            const icon = document.getElementById('minimize-icon');
+            if (icon) {
+                icon.setAttribute('data-lucide', isMinimized ? 'chevron-right' : 'chevron-left');
+                if (window.lucide) {
+                    window.lucide.createIcons();
+                }
+            }
+        }
+
+        function initAdminControls() {
+            lucide.createIcons();
+            const openMobileBtn = document.getElementById('open-mobile-sidebar-btn');
+            const closeMobileBtn = document.getElementById('close-mobile-sidebar-btn');
+            const mobileSidebar = document.getElementById('mobile-sidebar');
+            const backdrop = document.getElementById('mobile-sidebar-backdrop');
+
+            if (openMobileBtn) openMobileBtn.addEventListener('click', () => {
+                mobileSidebar.classList.remove('-translate-x-full');
+                backdrop.classList.remove('hidden');
+                setTimeout(() => { backdrop.classList.add('opacity-100'); }, 10);
+            });
+            if (closeMobileBtn) closeMobileBtn.addEventListener('click', closeSidebar);
+            if (backdrop) backdrop.addEventListener('click', closeSidebar);
+
+            // Dark Mode Logic
+            const htmlElement = document.documentElement;
+            const themeBtn = document.getElementById('theme-toggle');
+            
+            if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                htmlElement.classList.add('dark');
+                updateThemeIcons('dark');
+            } else {
+                htmlElement.classList.remove('dark');
+                updateThemeIcons('light');
+            }
+
+            function updateThemeIcons(theme) {
+                const iconDark = document.getElementById('theme-icon-dark');
+                const iconLight = document.getElementById('theme-icon-light');
+                if (theme === 'dark') {
+                    if (iconDark) iconDark.classList.remove('hidden');
+                    if (iconLight) iconLight.classList.add('hidden');
+                } else {
+                    if (iconDark) iconDark.classList.add('hidden');
+                    if (iconLight) iconLight.classList.remove('hidden');
+                }
+            }
+
+            if (themeBtn) {
+                themeBtn.addEventListener('click', () => {
+                    let activeTheme = 'light';
+                    if (htmlElement.classList.contains('dark')) {
+                        htmlElement.classList.remove('dark');
+                        localStorage.setItem('color-theme', 'light');
+                    } else {
+                        htmlElement.classList.add('dark');
+                        localStorage.setItem('color-theme', 'dark');
+                        activeTheme = 'dark';
+                    }
+                    updateThemeIcons(activeTheme);
+                });
+            }
+        }
+
+        function initPage(tabId) {
+            const titleMap = {
+                'overview': 'Analytics Overview',
+                'themes': 'Digital Themes Management',
+                'users': 'User Management',
+                'transactions': 'Transaction History Log',
+                'settings': 'Dashboard Settings',
+                'form': 'Form Elements Preview',
+                'form-wizard': 'Form Wizard Stepper',
+                'select': 'Select Elements Preview',
+                'datepicker': 'Date & Time Pickers',
+                'modal': 'Interactive Modals Preview',
+                'alert': 'Alert Panels & Badges'
+            };
+            
+            const pageTitle = document.getElementById('page-title');
+            if (pageTitle) {
+                pageTitle.innerText = titleMap[tabId] || 'Dashboard';
+            }
+
+            const btns = document.querySelectorAll('.tab-btn');
+            btns.forEach(btn => {
+                if (btn.getAttribute('data-tab') === tabId) {
+                    btn.classList.add('sidebar-item-active');
+                } else {
+                    btn.classList.remove('sidebar-item-active');
+                }
+            });
+        }
+
+        // DATABASE SIMULATION
+        const initialUsers = [
+            { name: 'Hasrul', email: 'hasrul@aitthemes.com', role: 'Admin', status: 'Active', date: '2026-01-10', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=64&q=80' }
+        ];
+
+        function getDB(key, defaults) {
+            if (!localStorage.getItem(key)) {
+                localStorage.setItem(key, JSON.stringify(defaults));
+            }
+            return JSON.parse(localStorage.getItem(key));
+        }
+
+        let users = getDB('ait_users', initialUsers);
+
+        function initProfileDisplay() {
+            const adminUser = users.find(u => u.role === 'Admin') || users[0];
+            const userName = adminUser.name;
+            const userAvatar = adminUser.avatar;
+
+            document.getElementById('mobile-user-name').innerText = userName;
+            document.getElementById('desktop-user-name').innerText = userName;
+            document.getElementById('header-user-name').innerText = userName;
+            
+            document.getElementById('mobile-user-avatar').src = userAvatar;
+            document.getElementById('desktop-user-avatar').src = userAvatar;
+            document.getElementById('header-user-avatar').src = userAvatar;
+        }
+
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `p-4 rounded-2xl shadow-xl flex items-center gap-3 bg-white dark:bg-slate-800 border border-slate-200/50 dark:border-slate-700/50 text-slate-800 dark:text-white text-sm pointer-events-auto fade-in transition-all duration-300`;
+            
+            let iconMarkup = '';
+            if (type === 'success') {
+                iconMarkup = `<div class="w-8 h-8 rounded-xl bg-emerald-100 dark:bg-emerald-950 flex items-center justify-center text-emerald-600 dark:text-emerald-400 shrink-0"><i data-lucide="check-circle" class="w-5 h-5"></i></div>`;
+            } else if (type === 'warning') {
+                iconMarkup = `<div class="w-8 h-8 rounded-xl bg-amber-100 dark:bg-amber-950 flex items-center justify-center text-amber-600 dark:text-amber-400 shrink-0"><i data-lucide="alert-triangle" class="w-5 h-5"></i></div>`;
+            } else {
+                iconMarkup = `<div class="w-8 h-8 rounded-xl bg-rose-100 dark:bg-rose-950 flex items-center justify-center text-rose-600 dark:text-rose-400 shrink-0"><i data-lucide="alert-circle" class="w-5 h-5"></i></div>`;
+            }
+
+            toast.innerHTML = `
+                ${iconMarkup}
+                <div class="flex-1 font-medium">${message}</div>
+                <button class="text-slate-400 hover:text-slate-600 dark:hover:text-white" onclick="this.parentElement.remove()">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            `;
+
+            container.appendChild(toast);
+            lucide.createIcons();
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-2');
+                setTimeout(() => { toast.remove(); }, 300);
+            }, 4000);
+        }
+
+        // Profile Form Loading & Saving
+        let currentAdminUser = null;
+        function loadSettingsData() {
+            // Find Admin user
+            currentAdminUser = users.find(u => u.role === 'Admin') || users[0];
+            
+            // Populate profile fields
+            document.getElementById('profile-name-input').value = currentAdminUser.name;
+            document.getElementById('profile-email-input').value = currentAdminUser.email;
+            document.getElementById('profile-role-input').value = currentAdminUser.role;
+            document.getElementById('profile-date-input').value = currentAdminUser.date;
+            document.getElementById('profile-avatar-input').value = currentAdminUser.avatar;
+            document.getElementById('profile-preview-avatar').src = currentAdminUser.avatar;
+
+            // Populate general fields
+            document.getElementById('settings-title-input').value = localStorage.getItem('settings_site_title') || "AIT Themes - Template Startup Modern";
+            document.getElementById('settings-maintenance-input').checked = localStorage.getItem('settings_maintenance_mode') === 'on';
+        }
+
+        function saveProfileSettings(e) {
+            e.preventDefault();
+            const newName = document.getElementById('profile-name-input').value;
+            const newEmail = document.getElementById('profile-email-input').value;
+            const newAvatar = document.getElementById('profile-avatar-input').value;
+
+            // Update in users array
+            users = getDB('ait_users', initialUsers);
+            const index = users.findIndex(u => u.role === 'Admin');
+            if (index !== -1) {
+                users[index].name = newName;
+                users[index].email = newEmail;
+                users[index].avatar = newAvatar;
+                localStorage.setItem('ait_users', JSON.stringify(users));
+                
+                showToast('Admin Profile updated successfully!', 'success');
+                // Refresh profile details on current page layout
+                initProfileDisplay();
+            } else {
+                showToast('Admin profile record not found.', 'error');
+            }
+        }
+
+        function saveWebsiteSettings(e) {
+            e.preventDefault();
+            const title = document.getElementById('settings-title-input').value;
+            const maintenance = document.getElementById('settings-maintenance-input').checked;
+
+            localStorage.setItem('settings_site_title', title);
+            localStorage.setItem('settings_maintenance_mode', maintenance ? 'on' : 'off');
+            showToast('Website configurations saved.', 'success');
+        }
+
+        function copyAPIKey() {
+            navigator.clipboard.writeText('pk_live_51Nw9xJ24Bf918C8B19020938C222049108');
+            showToast('API Key copied to clipboard!', 'success');
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const isMinimized = localStorage.getItem('sidebar-minimized') === 'true';
+            if (isMinimized) {
+                document.body.classList.add('sidebar-minimized');
+            }
+
+            const cb = window.location.protocol.startsWith('http') ? '?v=' + new Date().getTime() : '';
+            Promise.all([
+                fetch('component/sidebar.html' + cb).then(res => res.text()),
+                fetch('component/navbar.html' + cb).then(res => res.text()),
+                fetch('component/footer.html' + cb).then(res => res.text())
+            ])
+            .then(([sidebarData, navbarData, footerData]) => {
+                document.getElementById('sidebar-placeholder').innerHTML = sidebarData;
+                document.getElementById('navbar-placeholder').innerHTML = navbarData;
+                document.getElementById('footer-placeholder').innerHTML = footerData;
+
+                if (isMinimized) {
+                    const icon = document.getElementById('minimize-icon');
+                    if (icon) {
+                        icon.setAttribute('data-lucide', 'chevron-right');
+                    }
+                }
+
+                initAdminControls();
+                initPage('settings');
+                initProfileDisplay();
+                loadSettingsData();
+            })
+            .catch(error => {
+                console.error('Error loading admin components:', error);
+                initProfileDisplay();
+                loadSettingsData();
+            });
+        });
+    </script>
+</body>
+</html>

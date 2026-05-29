@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modal Preview - AIT Themes</title>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#2563eb', // Blue-600
+                        secondary: '#4f46e5', // Indigo-600
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Custom CSS for Scrollbars & Animations -->
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <style>
+        .fade-in {
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .sidebar-item-active {
+            background-color: #eff6ff;
+            color: #2563eb;
+            font-weight: 600;
+            border-left: 4px solid #2563eb;
+        }
+        .dark .sidebar-item-active {
+            background-color: rgba(37, 99, 235, 0.15);
+            color: #60a5fa;
+            border-left: 4px solid #3b82f6;
+        }
+
+        /* Sidebar Minimized state */
+        @media (min-width: 1024px) {
+            body.sidebar-minimized #desktop-sidebar {
+                width: 5rem; /* w-20 */
+            }
+            body.sidebar-minimized #main-content-wrapper {
+                padding-left: 5rem; /* lg:pl-20 */
+            }
+            body.sidebar-minimized #desktop-sidebar #desktop-logo-text,
+            body.sidebar-minimized #desktop-sidebar nav span,
+            body.sidebar-minimized #desktop-sidebar .tab-btn-text,
+            body.sidebar-minimized #desktop-sidebar #desktop-user-info,
+            body.sidebar-minimized #desktop-sidebar #desktop-logout-text {
+                display: none;
+            }
+            body.sidebar-minimized #desktop-sidebar .tab-btn {
+                justify-content: center;
+                padding-left: 0;
+                padding-right: 0;
+                gap: 0;
+            }
+            body.sidebar-minimized #desktop-sidebar #desktop-user-card {
+                justify-content: center;
+                padding: 0.5rem;
+            }
+            body.sidebar-minimized #desktop-sidebar #desktop-logout-btn {
+                justify-content: center;
+                padding: 0.5rem;
+                width: 2.75rem;
+                height: 2.75rem;
+                border-radius: 9999px;
+            }
+            body.sidebar-minimized #desktop-sidebar .h-16 {
+                justify-content: center;
+                padding-left: 0;
+                padding-right: 0;
+            }
+            body.sidebar-minimized #desktop-sidebar #minimize-sidebar-btn {
+                position: absolute;
+                right: -0.75rem;
+                top: 1.25rem;
+                background-color: white;
+                border: 1px solid rgb(226, 232, 240);
+                box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+                z-index: 50;
+                border-radius: 9999px;
+            }
+            body.sidebar-minimized.dark #desktop-sidebar #minimize-sidebar-btn {
+                background-color: rgb(30, 41, 59);
+                border-color: rgb(51, 65, 85);
+                box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.5);
+            }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-900 dark:text-slate-50 font-sans antialiased transition-colors duration-300">
+
+    <!-- Sidebar Placeholder -->
+    <div id="sidebar-placeholder"></div>
+
+    <!-- Main Content Wrapper -->
+    <div id="main-content-wrapper" class="lg:pl-64 flex flex-col min-h-screen bg-slate-50 dark:bg-slate-900 transition-all duration-300">
+        
+        <!-- Top Navbar Header Placeholder -->
+        <div id="navbar-placeholder"></div>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl w-full mx-auto space-y-6">
+
+            <!-- ================= TAB 9: MODAL (UTILITIES) ================= -->
+            <section id="tab-modal" class="tab-pane fade-in space-y-6">
+                <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-200/50 dark:border-slate-700/50 shadow-sm space-y-6">
+                    <h4 class="font-bold text-slate-800 dark:text-white mb-2 flex items-center gap-2">
+                        <i data-lucide="external-link" class="w-5 h-5 text-blue-600"></i> Interactive Modals
+                    </h4>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">Trigger animated overlay dialogs and confirmation boxes commonly used in dashboard operations.</p>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 pt-2">
+                        
+                        <!-- Trigger Default Modal -->
+                        <div class="p-5 rounded-2xl border border-slate-100 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-900/30 flex flex-col justify-between items-start gap-4">
+                            <div>
+                                <h5 class="text-sm font-semibold text-slate-800 dark:text-white">Default Modal</h5>
+                                <p class="text-xs text-slate-400 dark:text-slate-500 mt-1">Standard size modal overlay for settings or minor forms.</p>
+                            </div>
+                            <button onclick="openDemoModal('default')" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-semibold hover:shadow-lg transition-all">
+                                Open Modal
+                            </button>
+                        </div>
+
+                        <!-- Trigger Confirmation Modal -->
+                        <div class="p-5 rounded-2xl border border-slate-100 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-900/30 flex flex-col justify-between items-start gap-4">
+                            <div>
+                                <h5 class="text-sm font-semibold text-slate-800 dark:text-white">Confirm Danger Modal</h5>
+                                <p class="text-xs text-slate-400 dark:text-slate-500 mt-1">Confirm modal designed to verify destructive actions like deleting files.</p>
+                            </div>
+                            <button onclick="openDemoModal('confirm')" class="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-semibold hover:shadow-lg transition-all">
+                                Open Confirm
+                            </button>
+                        </div>
+
+                        <!-- Trigger Scrollable Modal -->
+                        <div class="p-5 rounded-2xl border border-slate-100 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-900/30 flex flex-col justify-between items-start gap-4">
+                            <div>
+                                <h5 class="text-sm font-semibold text-slate-800 dark:text-white">Scrollable Modal</h5>
+                                <p class="text-xs text-slate-400 dark:text-slate-500 mt-1">Large modal layout with internally scrollable content for long documents.</p>
+                            </div>
+                            <button onclick="openDemoModal('scrollable')" class="px-4 py-2 bg-slate-800 dark:bg-slate-700 hover:bg-slate-700 dark:hover:bg-slate-600 text-white rounded-xl text-xs font-semibold hover:shadow-lg transition-all">
+                                Open Scrollable
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <!-- Footer Placeholder -->
+            <div id="footer-placeholder"></div>
+        </main>
+    </div>
+
+    <!-- ================= 1. DEFAULT DEMO MODAL ================= -->
+    <div id="demo-modal-default" class="fixed inset-0 z-50 overflow-y-auto hidden">
+        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+            <!-- Backdrop -->
+            <div class="fixed inset-0 transition-opacity bg-slate-900/50 backdrop-blur-sm" onclick="closeDemoModal('default')"></div>
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen">&#8203;</span>
+            
+            <!-- Modal Body -->
+            <div id="demo-modal-default-card" class="inline-block align-bottom bg-white dark:bg-slate-800 rounded-3xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full border border-slate-200/50 dark:border-slate-700/50 scale-95 opacity-0 duration-300">
+                <div class="p-6">
+                    <div class="flex justify-between items-center pb-4 border-b border-slate-100 dark:border-slate-700">
+                        <h4 class="text-lg font-bold text-slate-900 dark:text-white">Edit Profile Meta</h4>
+                        <button onclick="closeDemoModal('default')" class="p-1 rounded-lg text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700">
+                            <i data-lucide="x" class="w-5 h-5"></i>
+                        </button>
+                    </div>
+                    <form onsubmit="event.preventDefault(); showToast('Demo info updated successfully!', 'success'); closeDemoModal('default');" class="space-y-4 mt-4">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Display Name</label>
+                            <input type="text" value="Hasrul" class="block w-full px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1">Department</label>
+                            <input type="text" value="Web Administration" class="block w-full px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
+                        </div>
+                        <div class="pt-4 border-t border-slate-100 dark:border-slate-700 flex justify-end gap-3">
+                            <button type="button" onclick="closeDemoModal('default')" class="px-5 py-2 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700 transition-all">
+                                Cancel
+                            </button>
+                            <button type="submit" class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-semibold hover:shadow-lg transition-all">
+                                Save Changes
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= 2. CONFIRM DANGER MODAL ================= -->
+    <div id="demo-modal-confirm" class="fixed inset-0 z-50 overflow-y-auto hidden">
+        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+            <!-- Backdrop -->
+            <div class="fixed inset-0 transition-opacity bg-slate-900/50 backdrop-blur-sm" onclick="closeDemoModal('confirm')"></div>
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen">&#8203;</span>
+            
+            <!-- Modal Body -->
+            <div id="demo-modal-confirm-card" class="inline-block align-bottom bg-white dark:bg-slate-800 rounded-3xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-md sm:w-full border border-slate-200/50 dark:border-slate-700/50 scale-95 opacity-0 duration-300">
+                <div class="p-6">
+                    <div class="flex items-start gap-4">
+                        <div class="w-12 h-12 rounded-full bg-rose-100 dark:bg-rose-950/30 flex items-center justify-center text-rose-600 dark:text-rose-400 shrink-0">
+                            <i data-lucide="alert-triangle" class="w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-bold text-slate-900 dark:text-white">Delete Theme Project?</h4>
+                            <p class="text-sm text-slate-500 dark:text-slate-400 mt-2">Are you sure you want to permanently delete the theme "Startup-Pro Landing Page"? This action is irreversible and all transaction history log relating to this item will be archived.</p>
+                        </div>
+                    </div>
+                    <div class="pt-6 mt-6 border-t border-slate-100 dark:border-slate-700 flex justify-end gap-3">
+                        <button type="button" onclick="closeDemoModal('confirm')" class="px-5 py-2 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700 transition-all">
+                            Cancel
+                        </button>
+                        <button type="button" onclick="showToast('Theme project has been deleted.', 'danger'); closeDemoModal('confirm');" class="px-5 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-semibold hover:shadow-lg hover:shadow-rose-500/20 transition-all">
+                            Delete Project
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= 3. SCROLLABLE LEGAL TERMS MODAL ================= -->
+    <div id="demo-modal-scrollable" class="fixed inset-0 z-50 overflow-y-auto hidden">
+        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+            <!-- Backdrop -->
+            <div class="fixed inset-0 transition-opacity bg-slate-900/50 backdrop-blur-sm" onclick="closeDemoModal('scrollable')"></div>
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen">&#8203;</span>
+            
+            <!-- Modal Body -->
+            <div id="demo-modal-scrollable-card" class="inline-block align-bottom bg-white dark:bg-slate-800 rounded-3xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-xl sm:w-full border border-slate-200/50 dark:border-slate-700/50 scale-95 opacity-0 duration-300">
+                <div class="p-6">
+                    <div class="flex justify-between items-center pb-4 border-b border-slate-100 dark:border-slate-700">
+                        <h4 class="text-lg font-bold text-slate-900 dark:text-white">End-User License Agreement</h4>
+                        <button onclick="closeDemoModal('scrollable')" class="p-1 rounded-lg text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700">
+                            <i data-lucide="x" class="w-5 h-5"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="my-4 text-sm text-slate-600 dark:text-slate-400 overflow-y-auto max-h-[300px] pr-2 space-y-4">
+                        <p class="font-semibold text-slate-800 dark:text-white">1. Grant of License</p>
+                        <p>AIT Themes grants you a non-exclusive, non-transferable, limited license to download, install and use our modern web design layouts and dashboard admin elements strictly in accordance with the terms of this Agreement. Any modification, re-licensing, or resale of standard templates is prohibited.</p>
+                        
+                        <p class="font-semibold text-slate-800 dark:text-white">2. User Restrictions</p>
+                        <p>You agree not to, and you will not permit others to license, sell, rent, lease, assign, distribute, transmit, host, outsource, disclose or otherwise commercially exploit the Application or make the codebase available to any third party who is not an active developer on your specific web development domain.</p>
+
+                        <p class="font-semibold text-slate-800 dark:text-white">3. Third Party Integrations</p>
+                        <p>The templates are delivered with specific third-party CDNs (Tailwind CSS, Lucide Icons, Unsplash, Google Fonts, and Chart.js). Use of these services is subject to their respective terms of service. AIT Themes does not host or take liability for any network disruptions caused by these external vendors.</p>
+
+                        <p class="font-semibold text-slate-800 dark:text-white">4. Modifications to Application</p>
+                        <p>AIT Themes reserves the right to modify, suspend or discontinue, temporarily or permanently, the Application or any service to which it connects, with or without notice and without liability to you. All product downloads from ait-themes.com are subject to lifetime metadata archives.</p>
+                    </div>
+
+                    <div class="pt-4 border-t border-slate-100 dark:border-slate-700 flex justify-end gap-3">
+                        <button type="button" onclick="closeDemoModal('scrollable')" class="px-5 py-2 border border-slate-200 dark:border-slate-700 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700 transition-all">
+                            Decline
+                        </button>
+                        <button type="button" onclick="showToast('EULA agreement accepted successfully!', 'success'); closeDemoModal('scrollable');" class="px-5 py-2 bg-slate-800 dark:bg-slate-700 hover:bg-slate-700 dark:hover:bg-slate-600 text-white rounded-xl text-xs font-semibold hover:shadow-lg transition-all">
+                            Accept Terms
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= SYSTEM TOAST NOTIFICATION ================= -->
+    <div id="toast-container" class="fixed bottom-5 right-5 z-[60] flex flex-col gap-3 pointer-events-none"></div>
+
+    <script>
+        function closeSidebar() {
+            const mobileSidebar = document.getElementById('mobile-sidebar');
+            const backdrop = document.getElementById('mobile-sidebar-backdrop');
+            if (mobileSidebar && backdrop) {
+                mobileSidebar.classList.add('-translate-x-full');
+                backdrop.classList.remove('opacity-100');
+                setTimeout(() => { backdrop.classList.add('hidden'); }, 300);
+            }
+        }
+
+        function toggleSidebarMinimize() {
+            const body = document.body;
+            body.classList.toggle('sidebar-minimized');
+            
+            const isMinimized = body.classList.contains('sidebar-minimized');
+            localStorage.setItem('sidebar-minimized', isMinimized ? 'true' : 'false');
+            
+            const icon = document.getElementById('minimize-icon');
+            if (icon) {
+                icon.setAttribute('data-lucide', isMinimized ? 'chevron-right' : 'chevron-left');
+                if (window.lucide) {
+                    window.lucide.createIcons();
+                }
+            }
+        }
+
+        function initAdminControls() {
+            lucide.createIcons();
+            const openMobileBtn = document.getElementById('open-mobile-sidebar-btn');
+            const closeMobileBtn = document.getElementById('close-mobile-sidebar-btn');
+            const mobileSidebar = document.getElementById('mobile-sidebar');
+            const backdrop = document.getElementById('mobile-sidebar-backdrop');
+
+            if (openMobileBtn) openMobileBtn.addEventListener('click', () => {
+                mobileSidebar.classList.remove('-translate-x-full');
+                backdrop.classList.remove('hidden');
+                setTimeout(() => { backdrop.classList.add('opacity-100'); }, 10);
+            });
+            if (closeMobileBtn) closeMobileBtn.addEventListener('click', closeSidebar);
+            if (backdrop) backdrop.addEventListener('click', closeSidebar);
+
+            // Dark Mode Logic
+            const htmlElement = document.documentElement;
+            const themeBtn = document.getElementById('theme-toggle');
+            
+            if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                htmlElement.classList.add('dark');
+                updateThemeIcons('dark');
+            } else {
+                htmlElement.classList.remove('dark');
+                updateThemeIcons('light');
+            }
+
+            function updateThemeIcons(theme) {
+                const iconDark = document.getElementById('theme-icon-dark');
+                const iconLight = document.getElementById('theme-icon-light');
+                if (theme === 'dark') {
+                    if (iconDark) iconDark.classList.remove('hidden');
+                    if (iconLight) iconLight.classList.add('hidden');
+                } else {
+                    if (iconDark) iconDark.classList.add('hidden');
+                    if (iconLight) iconLight.classList.remove('hidden');
+                }
+            }
+
+            if (themeBtn) {
+                themeBtn.addEventListener('click', () => {
+                    let activeTheme = 'light';
+                    if (htmlElement.classList.contains('dark')) {
+                        htmlElement.classList.remove('dark');
+                        localStorage.setItem('color-theme', 'light');
+                    } else {
+                        htmlElement.classList.add('dark');
+                        localStorage.setItem('color-theme', 'dark');
+                        activeTheme = 'dark';
+                    }
+                    updateThemeIcons(activeTheme);
+                });
+            }
+        }
+
+        function initPage(tabId) {
+            const titleMap = {
+                'overview': 'Analytics Overview',
+                'themes': 'Digital Themes Management',
+                'users': 'User Management',
+                'transactions': 'Transaction History Log',
+                'settings': 'Dashboard Settings',
+                'form': 'Form Elements Preview',
+                'form-wizard': 'Form Wizard Stepper',
+                'select': 'Select Elements Preview',
+                'datepicker': 'Date & Time Pickers',
+                'modal': 'Interactive Modals Preview',
+                'alert': 'Alert Panels & Badges'
+            };
+            
+            const pageTitle = document.getElementById('page-title');
+            if (pageTitle) {
+                pageTitle.innerText = titleMap[tabId] || 'Dashboard';
+            }
+
+            const btns = document.querySelectorAll('.tab-btn');
+            btns.forEach(btn => {
+                if (btn.getAttribute('data-tab') === tabId) {
+                    btn.classList.add('sidebar-item-active');
+                } else {
+                    btn.classList.remove('sidebar-item-active');
+                }
+            });
+        }
+
+        // DATABASE SIMULATION
+        const initialUsers = [
+            { name: 'Hasrul', email: 'hasrul@aitthemes.com', role: 'Admin', status: 'Active', date: '2026-01-10', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=64&q=80' }
+        ];
+
+        function getDB(key, defaults) {
+            if (!localStorage.getItem(key)) {
+                localStorage.setItem(key, JSON.stringify(defaults));
+            }
+            return JSON.parse(localStorage.getItem(key));
+        }
+
+        let users = getDB('ait_users', initialUsers);
+
+        function initProfileDisplay() {
+            const adminUser = users.find(u => u.role === 'Admin') || users[0];
+            const userName = adminUser.name;
+            const userAvatar = adminUser.avatar;
+
+            document.getElementById('mobile-user-name').innerText = userName;
+            document.getElementById('desktop-user-name').innerText = userName;
+            document.getElementById('header-user-name').innerText = userName;
+            
+            document.getElementById('mobile-user-avatar').src = userAvatar;
+            document.getElementById('desktop-user-avatar').src = userAvatar;
+            document.getElementById('header-user-avatar').src = userAvatar;
+        }
+
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `p-4 rounded-2xl shadow-xl flex items-center gap-3 bg-white dark:bg-slate-800 border border-slate-200/50 dark:border-slate-700/50 text-slate-800 dark:text-white text-sm pointer-events-auto fade-in transition-all duration-300`;
+            
+            let iconMarkup = '';
+            if (type === 'success') {
+                iconMarkup = `<div class="w-8 h-8 rounded-xl bg-emerald-100 dark:bg-emerald-950 flex items-center justify-center text-emerald-600 dark:text-emerald-400 shrink-0"><i data-lucide="check-circle" class="w-5 h-5"></i></div>`;
+            } else if (type === 'warning') {
+                iconMarkup = `<div class="w-8 h-8 rounded-xl bg-amber-100 dark:bg-amber-950 flex items-center justify-center text-amber-600 dark:text-amber-400 shrink-0"><i data-lucide="alert-triangle" class="w-5 h-5"></i></div>`;
+            } else if (type === 'danger') {
+                iconMarkup = `<div class="w-8 h-8 rounded-xl bg-rose-100 dark:bg-rose-950 flex items-center justify-center text-rose-600 dark:text-rose-400 shrink-0"><i data-lucide="trash-2" class="w-5 h-5"></i></div>`;
+            } else {
+                iconMarkup = `<div class="w-8 h-8 rounded-xl bg-rose-100 dark:bg-rose-950 flex items-center justify-center text-rose-600 dark:text-rose-400 shrink-0"><i data-lucide="alert-circle" class="w-5 h-5"></i></div>`;
+            }
+
+            toast.innerHTML = `
+                ${iconMarkup}
+                <div class="flex-1 font-medium">${message}</div>
+                <button class="text-slate-400 hover:text-slate-600 dark:hover:text-white" onclick="this.parentElement.remove()">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            `;
+
+            container.appendChild(toast);
+            lucide.createIcons();
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-2');
+                setTimeout(() => { toast.remove(); }, 300);
+            }, 4000);
+        }
+
+        // Demo Modals Helper Functions
+        function openDemoModal(type) {
+            const modal = document.getElementById(`demo-modal-${type}`);
+            const card = document.getElementById(`demo-modal-${type}-card`);
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                card.classList.remove('scale-95', 'opacity-0');
+                card.classList.add('scale-100', 'opacity-100');
+            }, 50);
+            if (window.lucide) {
+                window.lucide.createIcons();
+            }
+        }
+
+        function closeDemoModal(type) {
+            const modal = document.getElementById(`demo-modal-${type}`);
+            const card = document.getElementById(`demo-modal-${type}-card`);
+            card.classList.remove('scale-100', 'opacity-100');
+            card.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const isMinimized = localStorage.getItem('sidebar-minimized') === 'true';
+            if (isMinimized) {
+                document.body.classList.add('sidebar-minimized');
+            }
+
+            const cb = window.location.protocol.startsWith('http') ? '?v=' + new Date().getTime() : '';
+            Promise.all([
+                fetch('component/sidebar.html' + cb).then(res => res.text()),
+                fetch('component/navbar.html' + cb).then(res => res.text()),
+                fetch('component/footer.html' + cb).then(res => res.text())
+            ])
+            .then(([sidebarData, navbarData, footerData]) => {
+                document.getElementById('sidebar-placeholder').innerHTML = sidebarData;
+                document.getElementById('navbar-placeholder').innerHTML = navbarData;
+                document.getElementById('footer-placeholder').innerHTML = footerData;
+
+                if (isMinimized) {
+                    const icon = document.getElementById('minimize-icon');
+                    if (icon) {
+                        icon.setAttribute('data-lucide', 'chevron-right');
+                    }
+                }
+
+                initAdminControls();
+                initPage('modal');
+                initProfileDisplay();
+            })
+            .catch(error => {
+                console.error('Error loading admin components:', error);
+                initProfileDisplay();
+            });
+        });
+    </script>
+</body>
+</html>
